@@ -13,7 +13,7 @@
         
         /* 布局参数 - 可根据需要调整 */
         :root {
-            /* 间距参数 */
+            /* 间距参数 - 使用相对单位实现平滑变化 */
             --column-gap: 5px; /* 基本列间间距 */
             --column-gap-1-2: 5px; /* 第1列和第2列之间的间距 */
             --column-gap-2-3: 5px; /* 第2列和第3列之间的间距 */
@@ -107,6 +107,8 @@
             margin-bottom: 20px;
             justify-content: center;
             align-content: center;
+            width: 100%;
+            max-width: 1200px; /* 最大宽度，确保大屏幕上不会过度拉伸 */
         }
         
         /* 网格项样式 */
@@ -258,21 +260,89 @@
             border: 2px solid #2196f3;
         }
         
+        /* 卡片序列容器样式 - 使用flexbox确保垂直居中 */
+        .card-sequence-container {
+            position: relative;
+            width: calc(var(--card-width) * 5 + 10px * 6 + 10px * 2);
+            margin: 15px auto;
+            height: 80px; /* 足够容纳内容和可能的滚动条空间 */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
         /* 卡片序列样式 */
         .card-sequence {
             display: flex;
             overflow-x: auto;
             gap: 10px;
             padding: 10px;
-            margin: 15px 0;
             border: 1px solid #ddd;
             border-radius: 4px;
             background-color: #f5f5f5;
-            /* 固定长度，能够容纳五个卡片 */
-            width: calc(var(--card-width) * 5 + 10px * 6 + 10px * 2);
-            margin-left: auto;
-            margin-right: auto;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            scroll-behavior: smooth;
         }
+
+        /* 完全隐藏水平滚动条但保留滚动功能 */
+        .card-sequence::-webkit-scrollbar {
+            height: 0;
+            width: 0;
+        }
+
+        .card-sequence::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .card-sequence::-webkit-scrollbar-thumb {
+            background: transparent;
+        }
+
+        /* 对于Firefox */
+        .card-sequence {
+            scrollbar-width: none;
+        }
+
+        /* 高亮框样式 - 取消居中的高光圈，只保留卡片序列中的当前卡片高亮 */
+        .highlight-box {
+            display: none;
+        }
+
+        /* 游戏消息样式 */
+        .game-message {
+            background-color: rgba(255, 255, 255, 0.95);
+            border: 2px solid #ff5722;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 10;
+        }
+
+        .game-message h4 {
+            color: #ff5722;
+            margin-bottom: 15px;
+        }
+
+        .game-message button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .game-message button:hover {
+            background-color: #45a049;
+        }
+
+
         
         .sequence-card {
             flex: 0 0 auto;
@@ -300,9 +370,9 @@
         .sequence-card.current {
             /* 高亮效果，明显提示当前需要输入的卡片 */
             background-color: #ffecb3;
-            border: 2px solid #ffc107;
-            box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
-            transform: scale(1.05);
+            border: 3px solid #ffc107;
+            box-shadow: 0 0 15px rgba(255, 193, 7, 0.7);
+            transform: scale(1.1);
             transition: all 0.3s ease;
         }
         
@@ -365,36 +435,52 @@
             background-color: transparent !important;
         }
         
-        /* 响应式设计 */
-        @media (max-width: 1200px) {
-            .grid-container {
-                /* 在较小屏幕上简化布局 */
-                grid-template-columns: repeat(6, 1fr);
-                grid-template-rows: repeat(12, auto);
-                gap: var(--column-gap);
-            }
-            
-            /* 重置间距调整，使用默认布局 */
-            .grid-container > div {
-                margin-right: 0 !important;
-                margin-bottom: 0 !important;
+        /* 响应式设计 - 以800像素为分界线，保持6行12列结构，只进行等比例缩放 */
+        @media (max-width: 800px) {
+            :root {
+                /* 缩小卡片尺寸和间距，保持6行12列结构 */
+                --card-width: 35px;
+                --card-height: 35px;
+                --column-gap-1-2: 3px;
+                --column-gap-2-3: 3px;
+                --column-gap-3-4: 3px;
+                --column-gap-4-5: 12px;
+                --column-gap-5-6: 3px;
+                --column-gap-6-7: 3px;
+                --column-gap-7-8: 3px;
+                --column-gap-8-9: 12px;
+                --column-gap-9-10: 3px;
+                --column-gap-10-11: 3px;
+                --column-gap-11-12: 3px;
+                --row-gap-1-2: 12px;
+                --row-gap-2-3: 12px;
+                --row-gap-3-4: 3px;
+                --row-gap-4-5: 3px;
+                --row-gap-5-6: 3px;
             }
         }
         
-        @media (max-width: 768px) {
-            .grid-container {
-                /* 在更小屏幕上进一步简化 */
-                grid-template-columns: repeat(4, 1fr);
-                grid-template-rows: repeat(18, auto);
-                gap: var(--column-gap);
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .grid-container {
-                grid-template-columns: repeat(2, 1fr);
-                grid-template-rows: repeat(36, auto);
-                gap: var(--column-gap);
+        @media (max-width: 600px) {
+            :root {
+                /* 进一步缩小卡片尺寸和间距 */
+                --card-width: 30px;
+                --card-height: 30px;
+                --column-gap-1-2: 2px;
+                --column-gap-2-3: 2px;
+                --column-gap-3-4: 2px;
+                --column-gap-4-5: 8px;
+                --column-gap-5-6: 2px;
+                --column-gap-6-7: 2px;
+                --column-gap-7-8: 2px;
+                --column-gap-8-9: 8px;
+                --column-gap-9-10: 2px;
+                --column-gap-10-11: 2px;
+                --column-gap-11-12: 2px;
+                --row-gap-1-2: 8px;
+                --row-gap-2-3: 8px;
+                --row-gap-3-4: 2px;
+                --row-gap-4-5: 2px;
+                --row-gap-5-6: 2px;
             }
         }
     </style>
@@ -417,13 +503,21 @@
         <!-- 游戏模式界面 -->
         <div class="game-mode" id="gameMode" style="display: none;">
             <h3>游戏模式</h3>
-            <div class="card-sequence" id="cardSequence">
-                <!-- 卡片序列将通过JavaScript动态生成 -->
+            <div class="card-sequence-container">
+                <div class="card-sequence" id="cardSequence">
+                    <!-- 卡片序列将通过JavaScript动态生成 -->
+                </div>
+                <div class="highlight-box" id="highlightBox"></div>
             </div>
             <div class="game-stats">
                 <div>当前进度: <span id="gameProgress">0/54</span></div>
                 <div>正确次数: <span id="gameCorrect">0</span></div>
                 <div>错误次数: <span id="gameWrong">0</span></div>
+                <div>当前速度: <span id="gameSpeed">1.0x</span></div>
+            </div>
+            <div class="game-message" id="gameMessage" style="display: none;">
+                <h4 id="messageText">游戏失败！</h4>
+                <button onclick="restartGame()">重新开始</button>
             </div>
         </div>
         
@@ -1081,8 +1175,18 @@
             currentIndex: 0,
             shuffledCards: [],
             correctCount: 0,
-            wrongCount: 0
+            wrongCount: 0,
+            speed: 1.0,
+            baseSpeed: 1.0,
+            acceleration: 0.01,
+            scrollPosition: 0,
+            scrollSpeed: 2,
+            gameTimer: null,
+            startTime: 0,
+            isFirstCorrect: true // 是否是第一次正确点击
         };
+        
+
         
         // 卡片映射数组（按照用户要求的顺序）
         const cardMap = [];
@@ -1120,7 +1224,8 @@
             if (gameMode) {
                 button.textContent = '退出游戏';
                 gameModeDiv.style.display = 'block';
-                startGame();
+                // 进入游戏模式后直接初始化游戏状态并生成卡片序列，但不开始滚动
+                initGameMode();
             } else {
                 button.textContent = '游戏模式';
                 gameModeDiv.style.display = 'none';
@@ -1128,18 +1233,29 @@
             }
         }
         
-        // 开始游戏
-        function startGame() {
+        // 初始化游戏模式
+        function initGameMode() {
+            // 隐藏游戏消息
+            document.getElementById('gameMessage').style.display = 'none';
+            
             // 清除所有卡片的激活状态
             clearAllCards();
             
             // 重置游戏状态
             gameState = {
-                isPlaying: true,
+                isPlaying: false,
                 currentIndex: 0,
                 shuffledCards: [],
                 correctCount: 0,
-                wrongCount: 0
+                wrongCount: 0,
+                speed: 1.0, // 默认初始速度
+                baseSpeed: 1.0, // 默认基础速度
+                acceleration: 0.01, // 默认加速度
+                scrollPosition: 0,
+                scrollSpeed: 2, // 默认滚动速度
+                gameTimer: null,
+                startTime: 0,
+                isFirstCorrect: true // 是否是第一次正确点击
             };
             
             // 生成随机排列（Fisher-Yates洗牌算法）
@@ -1148,6 +1264,11 @@
             // 生成卡片序列
             generateCardSequence();
             
+            // 重置滚动位置
+            const sequenceContainer = document.getElementById('cardSequence');
+            gameState.scrollPosition = 0;
+            sequenceContainer.scrollLeft = 0;
+            
             // 更新游戏界面
             updateGameUI();
             
@@ -1155,10 +1276,65 @@
             showNextCard();
         }
         
+        // 重新开始游戏
+        function restartGame() {
+            // 隐藏游戏消息
+            document.getElementById('gameMessage').style.display = 'none';
+            
+            // 清除所有卡片的激活状态
+            clearAllCards();
+            
+            // 重置游戏状态
+            gameState = {
+                isPlaying: false,
+                currentIndex: 0,
+                shuffledCards: [],
+                correctCount: 0,
+                wrongCount: 0,
+                speed: 1.0, // 默认初始速度
+                baseSpeed: 1.0, // 默认基础速度
+                acceleration: 0.01, // 默认加速度
+                scrollPosition: 0,
+                scrollSpeed: 2, // 默认滚动速度
+                gameTimer: null,
+                startTime: 0,
+                isFirstCorrect: true // 是否是第一次正确点击
+            };
+            
+            // 生成随机排列（Fisher-Yates洗牌算法）
+            gameState.shuffledCards = [...cardMap].sort(() => Math.random() - 0.5);
+            
+            // 生成卡片序列
+            generateCardSequence();
+            
+            // 重置滚动位置
+            const sequenceContainer = document.getElementById('cardSequence');
+            gameState.scrollPosition = 0;
+            sequenceContainer.scrollLeft = 0;
+            
+            // 更新游戏界面
+            updateGameUI();
+            
+            // 显示第一张卡片
+            showNextCard();
+        }
+        
+
+        
         // 生成卡片序列
         function generateCardSequence() {
             const sequenceContainer = document.getElementById('cardSequence');
             sequenceContainer.innerHTML = '';
+            
+            // 添加2个占位卡片（前面）
+            for (let i = 0; i < 2; i++) {
+                const placeholderCard = document.createElement('div');
+                placeholderCard.className = 'sequence-card';
+                placeholderCard.textContent = '';
+                placeholderCard.style.backgroundColor = 'transparent';
+                placeholderCard.style.borderColor = 'transparent';
+                sequenceContainer.appendChild(placeholderCard);
+            }
             
             // 为每张卡片创建一个序列卡片
             gameState.shuffledCards.forEach((card, index) => {
@@ -1168,19 +1344,30 @@
                 sequenceCard.dataset.index = index;
                 sequenceContainer.appendChild(sequenceCard);
             });
+            
+            // 添加2个占位卡片（后面）
+            for (let i = 0; i < 2; i++) {
+                const placeholderCard = document.createElement('div');
+                placeholderCard.className = 'sequence-card';
+                placeholderCard.textContent = '';
+                placeholderCard.style.backgroundColor = 'transparent';
+                placeholderCard.style.borderColor = 'transparent';
+                sequenceContainer.appendChild(placeholderCard);
+            }
         }
         
         // 更新卡片序列
         function updateCardSequence() {
             const sequenceCards = document.querySelectorAll('.sequence-card');
+            const sequenceContainer = document.getElementById('cardSequence');
             
             // 标记已完成的卡片和当前卡片
             sequenceCards.forEach((card, index) => {
-                if (index < gameState.currentIndex) {
+                if (index < gameState.currentIndex + 2) { // +2 因为前面有2个占位卡片
                     // 已完成的卡片
                     card.classList.add('completed');
                     card.classList.remove('current');
-                } else if (index === gameState.currentIndex) {
+                } else if (index === gameState.currentIndex + 2) { // +2 因为前面有2个占位卡片
                     // 当前需要输入的卡片
                     card.classList.remove('completed');
                     card.classList.add('current');
@@ -1190,17 +1377,81 @@
                     card.classList.remove('current');
                 }
             });
+        }
+
+        // 游戏主循环
+        function gameLoop() {
+            if (!gameState.isPlaying) return;
             
-            // 滚动到当前需要点击的卡片
-            if (gameState.currentIndex < sequenceCards.length) {
-                sequenceCards[gameState.currentIndex].scrollIntoView({ behavior: 'smooth', inline: 'center' });
+            const sequenceContainer = document.getElementById('cardSequence');
+            const sequenceCards = document.querySelectorAll('.sequence-card');
+            
+            // 更新滚动位置
+            gameState.scrollPosition += gameState.scrollSpeed * gameState.speed;
+            
+            // 计算当前卡片位置
+            const cardWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-width')) + 10; // 卡片宽度 + 间距
+            const targetCardIndex = gameState.currentIndex + 2; // +2 因为前面有2个占位卡片
+            const targetCardPosition = targetCardIndex * cardWidth;
+            
+            // 检查是否失败（高亮框移出视野）
+            if (gameState.scrollPosition > targetCardPosition + cardWidth) {
+                gameOver(false);
+                return;
             }
+            
+            // 更新容器滚动位置
+            sequenceContainer.scrollLeft = gameState.scrollPosition;
+            
+            // 逐渐增加速度
+            gameState.speed = gameState.baseSpeed + (gameState.correctCount * gameState.acceleration);
+            document.getElementById('gameSpeed').textContent = gameState.speed.toFixed(1) + 'x';
+            
+            // 继续游戏循环
+            gameState.gameTimer = requestAnimationFrame(gameLoop);
         }
         
         // 结束游戏
         function endGame() {
             gameState.isPlaying = false;
+            
+            // 清除游戏定时器
+            if (gameState.gameTimer) {
+                cancelAnimationFrame(gameState.gameTimer);
+                gameState.gameTimer = null;
+            }
+            
+
+            
             clearAllCards();
+        }
+
+        // 游戏结束处理
+        function gameOver(isWin) {
+            gameState.isPlaying = false;
+            
+            // 清除游戏定时器
+            if (gameState.gameTimer) {
+                cancelAnimationFrame(gameState.gameTimer);
+                gameState.gameTimer = null;
+            }
+            
+
+            
+            // 显示游戏结果
+            const gameMessage = document.getElementById('gameMessage');
+            const messageText = document.getElementById('messageText');
+            
+            if (isWin) {
+                const endTime = Date.now();
+                const duration = (endTime - gameState.startTime) / 1000;
+                const speed = (gameState.correctCount / duration).toFixed(2);
+                messageText.innerHTML = `游戏胜利！<br>用时: ${duration.toFixed(2)}秒<br>正确率: ${Math.round(gameState.correctCount / 54 * 100)}%<br>速度: ${speed}卡/秒`;
+            } else {
+                messageText.textContent = '游戏失败！高亮框移出视野';
+            }
+            
+            gameMessage.style.display = 'block';
         }
         
         // 更新游戏界面
@@ -1213,23 +1464,12 @@
         // 显示下一张卡片
         function showNextCard() {
             if (gameState.currentIndex >= 54) {
-                // 游戏结束
-                gameState.isPlaying = false;
-                
-                // 更新卡片序列
-                updateCardSequence();
-                
-                // 自动重置并开始新游戏
-                setTimeout(() => {
-                    if (gameMode) { // 确保仍然在游戏模式中
-                        startGame();
-                    }
-                }, 2000); // 2秒后自动开始新游戏
-                
+                // 游戏胜利
+                gameOver(true);
                 return;
             }
             
-            // 不需要更新单张卡片显示，因为已经移除了
+            // 更新游戏界面
             updateGameUI();
             
             // 更新卡片序列
@@ -1238,7 +1478,7 @@
         
         // 检查用户点击的卡片是否正确
         function checkCardClick(cardElement) {
-            if (!gameMode || !gameState.isPlaying) return;
+            if (!gameMode) return;
             
             const clickedCardText = cardElement.textContent;
             const currentCard = gameState.shuffledCards[gameState.currentIndex];
@@ -1354,6 +1594,18 @@
                 
                 gameState.correctCount++;
                 gameState.currentIndex++;
+                
+                // 不需要强制使高亮框居中，让滚动条按照正常速度滚动
+                
+                // 如果是第一次正确点击，自动开始游戏
+                if (gameState.isFirstCorrect) {
+                    gameState.isFirstCorrect = false;
+                    gameState.isPlaying = true;
+                    gameState.startTime = Date.now();
+                    // 开始游戏循环
+                    gameState.gameTimer = requestAnimationFrame(gameLoop);
+                }
+                
                 showNextCard();
             } else {
                 // 错误
@@ -1364,7 +1616,8 @@
         
         // 修改toggleStatus函数，添加游戏模式的卡片点击检查
         function toggleStatus(element) {
-            if (gameMode && gameState.isPlaying) {
+            if (gameMode) {
+                // 在游戏模式下，无论isPlaying是否为true，都调用checkCardClick函数
                 checkCardClick(element);
             } else {
                 if (element.classList.contains('active')) {
@@ -1447,6 +1700,63 @@
         
         // 初始化键盘映射
         initKeyboardMapping();
+        
+        // 初始化设置控件
+        initSettingsControls();
+        
+        // 切换设置窗口
+        function toggleSettings() {
+            settingsVisible = !settingsVisible;
+            const settingsWindow = document.getElementById('settingsWindow');
+            
+            if (settingsVisible) {
+                settingsWindow.style.display = 'block';
+            } else {
+                settingsWindow.style.display = 'none';
+            }
+        }
+        
+        // 保存设置
+        function saveSettings() {
+            const initialSpeed = parseFloat(document.getElementById('initialSpeed').value);
+            const speedDuration = parseInt(document.getElementById('speedDuration').value) * 1000; // 转换为毫秒
+            const speedIncreasePercent = parseInt(document.getElementById('speedIncrease').value);
+            
+            // 更新游戏状态中的设置
+            gameState.baseSpeed = initialSpeed;
+            gameState.speedDuration = speedDuration;
+            gameState.speedIncreasePercent = speedIncreasePercent;
+            
+            // 显示保存成功消息
+            alert('设置已保存！');
+        }
+        
+        // 初始化设置控件
+        function initSettingsControls() {
+            // 初始速度滑块
+            const initialSpeedSlider = document.getElementById('initialSpeed');
+            const initialSpeedValue = document.getElementById('initialSpeedValue');
+            
+            initialSpeedSlider.addEventListener('input', function() {
+                initialSpeedValue.textContent = this.value;
+            });
+            
+            // 速度持续时间滑块
+            const speedDurationSlider = document.getElementById('speedDuration');
+            const speedDurationValue = document.getElementById('speedDurationValue');
+            
+            speedDurationSlider.addEventListener('input', function() {
+                speedDurationValue.textContent = this.value;
+            });
+            
+            // 速度增加百分比滑块
+            const speedIncreaseSlider = document.getElementById('speedIncrease');
+            const speedIncreaseValue = document.getElementById('speedIncreaseValue');
+            
+            speedIncreaseSlider.addEventListener('input', function() {
+                speedIncreaseValue.textContent = this.value;
+            });
+        }
         
 
     </script>
