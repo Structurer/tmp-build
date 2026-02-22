@@ -1080,6 +1080,9 @@
         
         // 开始游戏
         function startGame() {
+            // 清除所有卡片的激活状态
+            clearAllCards();
+            
             // 重置游戏状态
             gameState = {
                 isPlaying: true,
