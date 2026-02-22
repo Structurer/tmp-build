@@ -1276,6 +1276,79 @@
             }
         }
         
+        // 键盘按键映射
+        function initKeyboardMapping() {
+            // 获取所有卡片
+            const allCards = document.querySelectorAll('.grid-container > div');
+            
+            // 按键映射：调整为用户要求的映射关系
+            const keyMapping = {
+                'a': '3',
+                's': '4',
+                'd': '5',
+                'f': '6',
+                'r': '7',
+                't': '8',
+                'y': '9',
+                'u': '10',
+                'j': 'J',
+                'k': 'Q',
+                'l': 'K',
+                ';': 'A',
+                'g': '2', // g对应左侧2
+                'h': '2', // h对应左侧2
+                'e': '小王', // e对应小王
+                'i': '大王' // i对应大王
+            };
+            
+            // 添加键盘事件监听器
+            document.addEventListener('keydown', function(event) {
+                const key = event.key;
+                const mappedValue = keyMapping[key];
+                
+                if (mappedValue) {
+                    // 查找对应的卡片
+                    allCards.forEach(card => {
+                        if (card.hasAttribute('onclick')) {
+                            const cardText = card.textContent;
+                            
+                            if (mappedValue === '小王' || mappedValue === '大王') {
+                                // 处理大小王
+                                if (cardText === mappedValue) {
+                                    toggleStatus(card);
+                                }
+                            } else if (mappedValue === '2') {
+                                // 处理2的卡片，选择最左侧的2
+                                // 收集所有带有two-item类的卡片
+                                const twoCards = document.querySelectorAll('.grid-container .two-item');
+                                // 只选择最左侧的2卡片
+                                if (twoCards.length > 0) {
+                                    toggleStatus(twoCards[0]);
+                                }
+                            } else {
+                                // 处理数字和字母卡片，选择最底部那行的对应卡片
+                                // 对于数字卡片，使用更宽松的匹配方式
+                                const isNumberMatch = !isNaN(mappedValue) && cardText.includes(mappedValue);
+                                // 对于字母卡片，使用精确匹配
+                                const isLetterMatch = isNaN(mappedValue) && cardText.includes(mappedValue);
+                                
+                                if (isNumberMatch || isLetterMatch) {
+                                    // 检查是否是最底部那行的卡片（第61-72个元素，从0开始索引）
+                                    const cardIndex = Array.from(allCards).indexOf(card);
+                                    if (cardIndex >= 60 && cardIndex <= 71) { // 调整为0-based索引
+                                        toggleStatus(card);
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        
+        // 初始化键盘映射
+        initKeyboardMapping();
+        
 
     </script>
 </body>
