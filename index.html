@@ -11,9 +11,9 @@
             box-sizing: border-box;
         }
         
-        /* 布局参数 - 可根据需要调整 */
+        /* 布局参数 - 使用固定值作为默认值（800像素以上） */
         :root {
-            /* 间距参数 - 使用相对单位实现平滑变化 */
+            /* 间距参数 */
             --column-gap: 5px; /* 基本列间间距 */
             --column-gap-1-2: 5px; /* 第1列和第2列之间的间距 */
             --column-gap-2-3: 5px; /* 第2列和第3列之间的间距 */
@@ -40,6 +40,36 @@
             --card-padding: 0px; /* 卡片内边距 */
         }
         
+        /* 响应式设计 - 在800像素以下使用vw单位实现等比例缩放 */
+        @media (max-width: 800px) {
+            :root {
+                /* 间距参数 - 使用vw单位，实现等比例缩放 */
+                --column-gap: 0.625vw; /* 5px / 800px * 100 = 0.625vw */
+                --column-gap-1-2: 0.625vw;
+                --column-gap-2-3: 0.625vw;
+                --column-gap-3-4: 0.625vw;
+                --column-gap-4-5: 2.5vw; /* 20px / 800px * 100 = 2.5vw */
+                --column-gap-5-6: 0.625vw;
+                --column-gap-6-7: 0.625vw;
+                --column-gap-7-8: 0.625vw;
+                --column-gap-8-9: 2.5vw;
+                --column-gap-9-10: 0.625vw;
+                --column-gap-10-11: 0.625vw;
+                --column-gap-11-12: 0.625vw;
+
+                --row-gap: 0.625vw;
+                --row-gap-1-2: 2.5vw; /* 20px / 800px * 100 = 2.5vw */
+                --row-gap-2-3: 2.5vw;
+                --row-gap-3-4: 0.625vw;
+                --row-gap-4-5: 0.625vw;
+                --row-gap-5-6: 0.625vw;
+                
+                /* 卡片尺寸参数 - 使用vw单位，实现等比例缩放 */
+                --card-width: 6.25vw; /* 50px / 800px * 100 = 6.25vw */
+                --card-height: 6.25vw; /* 50px / 800px * 100 = 6.25vw */
+            }
+        }
+        
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
@@ -64,51 +94,36 @@
         /* 12列6行网格布局 */
         .grid-container {
             display: grid;
-            /* 使用固定宽度而不是1fr，确保间距一致 */
-            grid-template-columns: 
-                var(--card-width) 
-                var(--column-gap-1-2) 
-                var(--card-width) 
-                var(--column-gap-2-3) 
-                var(--card-width) 
-                var(--column-gap-3-4) 
-                var(--card-width) 
-                var(--column-gap-4-5) 
-                var(--card-width) 
-                var(--column-gap-5-6) 
-                var(--card-width) 
-                var(--column-gap-6-7) 
-                var(--card-width) 
-                var(--column-gap-7-8) 
-                var(--card-width) 
-                var(--column-gap-8-9) 
-                var(--card-width) 
-                var(--column-gap-9-10) 
-                var(--card-width) 
-                var(--column-gap-10-11) 
-                var(--card-width) 
-                var(--column-gap-11-12) 
-                var(--card-width);
-            /* 使用grid-template-rows定义每行的高度和间距 */
-            grid-template-rows: 
-                var(--card-height) 
-                var(--row-gap-1-2) 
-                var(--card-height) 
-                var(--row-gap-2-3) 
-                var(--card-height) 
-                var(--row-gap-3-4) 
-                var(--card-height) 
-                var(--row-gap-4-5) 
-                var(--card-height) 
-                var(--row-gap-5-6) 
-                var(--card-height);
-            gap: 0;
+            /* 明确设置12列的结构，不会重组 */
+            grid-template-columns: repeat(12, var(--card-width));
+            /* 明确设置6行的结构 */
+            grid-template-rows: repeat(6, var(--card-height));
+            /* 设置列间距和行间距 */
+            column-gap: var(--column-gap);
+            row-gap: var(--row-gap);
+            /* 居中显示 */
             margin: 0 auto;
             margin-bottom: 20px;
-            justify-content: center;
-            align-content: center;
-            width: 100%;
-            max-width: 1200px; /* 最大宽度，确保大屏幕上不会过度拉伸 */
+            /* 确保宽度适合内容，不会重组 */
+            width: fit-content;
+            /* 最小宽度为内容宽度，确保不会重组 */
+            min-width: min-content;
+            /* 当宽度超过容器时，显示水平滚动条 */
+            overflow-x: auto;
+        }
+        
+        /* 确保容器不会限制grid布局的宽度 */
+        .container {
+            /* 最大宽度为100%，允许水平滚动 */
+            max-width: 100%;
+            /* 当grid布局宽度超过容器时，显示水平滚动条 */
+            overflow-x: auto;
+        }
+        
+        /* 确保body不会限制容器宽度 */
+        body {
+            /* 允许水平滚动 */
+            overflow-x: auto;
         }
         
         /* 网格项样式 */
@@ -133,87 +148,87 @@
         /* 位置调整：确保每个卡片都在正确的位置 */
         /* 第一行 */
         .grid-container > div:nth-child(1) { grid-column: 1; grid-row: 1; }
-        .grid-container > div:nth-child(2) { grid-column: 3; grid-row: 1; }
-        .grid-container > div:nth-child(3) { grid-column: 5; grid-row: 1; }
-        .grid-container > div:nth-child(4) { grid-column: 7; grid-row: 1; }
-        .grid-container > div:nth-child(5) { grid-column: 9; grid-row: 1; }
-        .grid-container > div:nth-child(6) { grid-column: 11; grid-row: 1; }
-        .grid-container > div:nth-child(7) { grid-column: 13; grid-row: 1; }
-        .grid-container > div:nth-child(8) { grid-column: 15; grid-row: 1; }
-        .grid-container > div:nth-child(9) { grid-column: 17; grid-row: 1; }
-        .grid-container > div:nth-child(10) { grid-column: 19; grid-row: 1; }
-        .grid-container > div:nth-child(11) { grid-column: 21; grid-row: 1; }
-        .grid-container > div:nth-child(12) { grid-column: 23; grid-row: 1; }
+        .grid-container > div:nth-child(2) { grid-column: 2; grid-row: 1; }
+        .grid-container > div:nth-child(3) { grid-column: 3; grid-row: 1; }
+        .grid-container > div:nth-child(4) { grid-column: 4; grid-row: 1; }
+        .grid-container > div:nth-child(5) { grid-column: 5; grid-row: 1; }
+        .grid-container > div:nth-child(6) { grid-column: 6; grid-row: 1; }
+        .grid-container > div:nth-child(7) { grid-column: 7; grid-row: 1; }
+        .grid-container > div:nth-child(8) { grid-column: 8; grid-row: 1; }
+        .grid-container > div:nth-child(9) { grid-column: 9; grid-row: 1; }
+        .grid-container > div:nth-child(10) { grid-column: 10; grid-row: 1; }
+        .grid-container > div:nth-child(11) { grid-column: 11; grid-row: 1; }
+        .grid-container > div:nth-child(12) { grid-column: 12; grid-row: 1; }
         
         /* 第二行 */
-        .grid-container > div:nth-child(13) { grid-column: 1; grid-row: 3; }
-        .grid-container > div:nth-child(14) { grid-column: 3; grid-row: 3; }
-        .grid-container > div:nth-child(15) { grid-column: 5; grid-row: 3; }
-        .grid-container > div:nth-child(16) { grid-column: 7; grid-row: 3; }
-        .grid-container > div:nth-child(17) { grid-column: 9; grid-row: 3; }
-        .grid-container > div:nth-child(18) { grid-column: 11; grid-row: 3; }
-        .grid-container > div:nth-child(19) { grid-column: 13; grid-row: 3; }
-        .grid-container > div:nth-child(20) { grid-column: 15; grid-row: 3; }
-        .grid-container > div:nth-child(21) { grid-column: 17; grid-row: 3; }
-        .grid-container > div:nth-child(22) { grid-column: 19; grid-row: 3; }
-        .grid-container > div:nth-child(23) { grid-column: 21; grid-row: 3; }
-        .grid-container > div:nth-child(24) { grid-column: 23; grid-row: 3; }
+        .grid-container > div:nth-child(13) { grid-column: 1; grid-row: 2; }
+        .grid-container > div:nth-child(14) { grid-column: 2; grid-row: 2; }
+        .grid-container > div:nth-child(15) { grid-column: 3; grid-row: 2; }
+        .grid-container > div:nth-child(16) { grid-column: 4; grid-row: 2; }
+        .grid-container > div:nth-child(17) { grid-column: 5; grid-row: 2; }
+        .grid-container > div:nth-child(18) { grid-column: 6; grid-row: 2; }
+        .grid-container > div:nth-child(19) { grid-column: 7; grid-row: 2; }
+        .grid-container > div:nth-child(20) { grid-column: 8; grid-row: 2; }
+        .grid-container > div:nth-child(21) { grid-column: 9; grid-row: 2; }
+        .grid-container > div:nth-child(22) { grid-column: 10; grid-row: 2; }
+        .grid-container > div:nth-child(23) { grid-column: 11; grid-row: 2; }
+        .grid-container > div:nth-child(24) { grid-column: 12; grid-row: 2; }
         
         /* 第三行 */
-        .grid-container > div:nth-child(25) { grid-column: 1; grid-row: 5; }
-        .grid-container > div:nth-child(26) { grid-column: 3; grid-row: 5; }
-        .grid-container > div:nth-child(27) { grid-column: 5; grid-row: 5; }
-        .grid-container > div:nth-child(28) { grid-column: 7; grid-row: 5; }
-        .grid-container > div:nth-child(29) { grid-column: 9; grid-row: 5; }
-        .grid-container > div:nth-child(30) { grid-column: 11; grid-row: 5; }
-        .grid-container > div:nth-child(31) { grid-column: 13; grid-row: 5; }
-        .grid-container > div:nth-child(32) { grid-column: 15; grid-row: 5; }
-        .grid-container > div:nth-child(33) { grid-column: 17; grid-row: 5; }
-        .grid-container > div:nth-child(34) { grid-column: 19; grid-row: 5; }
-        .grid-container > div:nth-child(35) { grid-column: 21; grid-row: 5; }
-        .grid-container > div:nth-child(36) { grid-column: 23; grid-row: 5; }
+        .grid-container > div:nth-child(25) { grid-column: 1; grid-row: 3; }
+        .grid-container > div:nth-child(26) { grid-column: 2; grid-row: 3; }
+        .grid-container > div:nth-child(27) { grid-column: 3; grid-row: 3; }
+        .grid-container > div:nth-child(28) { grid-column: 4; grid-row: 3; }
+        .grid-container > div:nth-child(29) { grid-column: 5; grid-row: 3; }
+        .grid-container > div:nth-child(30) { grid-column: 6; grid-row: 3; }
+        .grid-container > div:nth-child(31) { grid-column: 7; grid-row: 3; }
+        .grid-container > div:nth-child(32) { grid-column: 8; grid-row: 3; }
+        .grid-container > div:nth-child(33) { grid-column: 9; grid-row: 3; }
+        .grid-container > div:nth-child(34) { grid-column: 10; grid-row: 3; }
+        .grid-container > div:nth-child(35) { grid-column: 11; grid-row: 3; }
+        .grid-container > div:nth-child(36) { grid-column: 12; grid-row: 3; }
         
         /* 第四行 */
-        .grid-container > div:nth-child(37) { grid-column: 1; grid-row: 7; }
-        .grid-container > div:nth-child(38) { grid-column: 3; grid-row: 7; }
-        .grid-container > div:nth-child(39) { grid-column: 5; grid-row: 7; }
-        .grid-container > div:nth-child(40) { grid-column: 7; grid-row: 7; }
-        .grid-container > div:nth-child(41) { grid-column: 9; grid-row: 7; }
-        .grid-container > div:nth-child(42) { grid-column: 11; grid-row: 7; }
-        .grid-container > div:nth-child(43) { grid-column: 13; grid-row: 7; }
-        .grid-container > div:nth-child(44) { grid-column: 15; grid-row: 7; }
-        .grid-container > div:nth-child(45) { grid-column: 17; grid-row: 7; }
-        .grid-container > div:nth-child(46) { grid-column: 19; grid-row: 7; }
-        .grid-container > div:nth-child(47) { grid-column: 21; grid-row: 7; }
-        .grid-container > div:nth-child(48) { grid-column: 23; grid-row: 7; }
+        .grid-container > div:nth-child(37) { grid-column: 1; grid-row: 4; }
+        .grid-container > div:nth-child(38) { grid-column: 2; grid-row: 4; }
+        .grid-container > div:nth-child(39) { grid-column: 3; grid-row: 4; }
+        .grid-container > div:nth-child(40) { grid-column: 4; grid-row: 4; }
+        .grid-container > div:nth-child(41) { grid-column: 5; grid-row: 4; }
+        .grid-container > div:nth-child(42) { grid-column: 6; grid-row: 4; }
+        .grid-container > div:nth-child(43) { grid-column: 7; grid-row: 4; }
+        .grid-container > div:nth-child(44) { grid-column: 8; grid-row: 4; }
+        .grid-container > div:nth-child(45) { grid-column: 9; grid-row: 4; }
+        .grid-container > div:nth-child(46) { grid-column: 10; grid-row: 4; }
+        .grid-container > div:nth-child(47) { grid-column: 11; grid-row: 4; }
+        .grid-container > div:nth-child(48) { grid-column: 12; grid-row: 4; }
         
         /* 第五行 */
-        .grid-container > div:nth-child(49) { grid-column: 1; grid-row: 9; }
-        .grid-container > div:nth-child(50) { grid-column: 3; grid-row: 9; }
-        .grid-container > div:nth-child(51) { grid-column: 5; grid-row: 9; }
-        .grid-container > div:nth-child(52) { grid-column: 7; grid-row: 9; }
-        .grid-container > div:nth-child(53) { grid-column: 9; grid-row: 9; }
-        .grid-container > div:nth-child(54) { grid-column: 11; grid-row: 9; }
-        .grid-container > div:nth-child(55) { grid-column: 13; grid-row: 9; }
-        .grid-container > div:nth-child(56) { grid-column: 15; grid-row: 9; }
-        .grid-container > div:nth-child(57) { grid-column: 17; grid-row: 9; }
-        .grid-container > div:nth-child(58) { grid-column: 19; grid-row: 9; }
-        .grid-container > div:nth-child(59) { grid-column: 21; grid-row: 9; }
-        .grid-container > div:nth-child(60) { grid-column: 23; grid-row: 9; }
+        .grid-container > div:nth-child(49) { grid-column: 1; grid-row: 5; }
+        .grid-container > div:nth-child(50) { grid-column: 2; grid-row: 5; }
+        .grid-container > div:nth-child(51) { grid-column: 3; grid-row: 5; }
+        .grid-container > div:nth-child(52) { grid-column: 4; grid-row: 5; }
+        .grid-container > div:nth-child(53) { grid-column: 5; grid-row: 5; }
+        .grid-container > div:nth-child(54) { grid-column: 6; grid-row: 5; }
+        .grid-container > div:nth-child(55) { grid-column: 7; grid-row: 5; }
+        .grid-container > div:nth-child(56) { grid-column: 8; grid-row: 5; }
+        .grid-container > div:nth-child(57) { grid-column: 9; grid-row: 5; }
+        .grid-container > div:nth-child(58) { grid-column: 10; grid-row: 5; }
+        .grid-container > div:nth-child(59) { grid-column: 11; grid-row: 5; }
+        .grid-container > div:nth-child(60) { grid-column: 12; grid-row: 5; }
         
         /* 第六行 */
-        .grid-container > div:nth-child(61) { grid-column: 1; grid-row: 11; }
-        .grid-container > div:nth-child(62) { grid-column: 3; grid-row: 11; }
-        .grid-container > div:nth-child(63) { grid-column: 5; grid-row: 11; }
-        .grid-container > div:nth-child(64) { grid-column: 7; grid-row: 11; }
-        .grid-container > div:nth-child(65) { grid-column: 9; grid-row: 11; }
-        .grid-container > div:nth-child(66) { grid-column: 11; grid-row: 11; }
-        .grid-container > div:nth-child(67) { grid-column: 13; grid-row: 11; }
-        .grid-container > div:nth-child(68) { grid-column: 15; grid-row: 11; }
-        .grid-container > div:nth-child(69) { grid-column: 17; grid-row: 11; }
-        .grid-container > div:nth-child(70) { grid-column: 19; grid-row: 11; }
-        .grid-container > div:nth-child(71) { grid-column: 21; grid-row: 11; }
-        .grid-container > div:nth-child(72) { grid-column: 23; grid-row: 11; }
+        .grid-container > div:nth-child(61) { grid-column: 1; grid-row: 6; }
+        .grid-container > div:nth-child(62) { grid-column: 2; grid-row: 6; }
+        .grid-container > div:nth-child(63) { grid-column: 3; grid-row: 6; }
+        .grid-container > div:nth-child(64) { grid-column: 4; grid-row: 6; }
+        .grid-container > div:nth-child(65) { grid-column: 5; grid-row: 6; }
+        .grid-container > div:nth-child(66) { grid-column: 6; grid-row: 6; }
+        .grid-container > div:nth-child(67) { grid-column: 7; grid-row: 6; }
+        .grid-container > div:nth-child(68) { grid-column: 8; grid-row: 6; }
+        .grid-container > div:nth-child(69) { grid-column: 9; grid-row: 6; }
+        .grid-container > div:nth-child(70) { grid-column: 10; grid-row: 6; }
+        .grid-container > div:nth-child(71) { grid-column: 11; grid-row: 6; }
+        .grid-container > div:nth-child(72) { grid-column: 12; grid-row: 6; }
         
         .grid-item:hover {
             background-color: #e0e0e0;
@@ -263,9 +278,9 @@
         /* 卡片序列容器样式 - 使用flexbox确保垂直居中 */
         .card-sequence-container {
             position: relative;
-            width: calc(var(--card-width) * 5 + 10px * 6 + 10px * 2);
+            width: calc(var(--card-width) * 5 + var(--column-gap-1-2) * 6 + var(--column-gap-1-2) * 2);
             margin: 15px auto;
-            height: 80px; /* 足够容纳内容和可能的滚动条空间 */
+            height: calc(var(--card-height) + 20px); /* 足够容纳内容和可能的滚动条空间 */
             overflow: hidden;
             display: flex;
             align-items: center;
@@ -275,8 +290,8 @@
         .card-sequence {
             display: flex;
             overflow-x: auto;
-            gap: 10px;
-            padding: 10px;
+            gap: var(--column-gap-1-2);
+            padding: var(--column-gap-1-2);
             border: 1px solid #ddd;
             border-radius: 4px;
             background-color: #f5f5f5;
@@ -285,6 +300,8 @@
             z-index: 1;
             scroll-behavior: smooth;
         }
+        
+        /* 卡片序列容器的边距和高度也会通过CSS变量自动响应式调整 */
 
         /* 完全隐藏水平滚动条但保留滚动功能 */
         .card-sequence::-webkit-scrollbar {
@@ -435,54 +452,8 @@
             background-color: transparent !important;
         }
         
-        /* 响应式设计 - 以800像素为分界线，保持6行12列结构，只进行等比例缩放 */
-        @media (max-width: 800px) {
-            :root {
-                /* 缩小卡片尺寸和间距，保持6行12列结构 */
-                --card-width: 35px;
-                --card-height: 35px;
-                --column-gap-1-2: 3px;
-                --column-gap-2-3: 3px;
-                --column-gap-3-4: 3px;
-                --column-gap-4-5: 12px;
-                --column-gap-5-6: 3px;
-                --column-gap-6-7: 3px;
-                --column-gap-7-8: 3px;
-                --column-gap-8-9: 12px;
-                --column-gap-9-10: 3px;
-                --column-gap-10-11: 3px;
-                --column-gap-11-12: 3px;
-                --row-gap-1-2: 12px;
-                --row-gap-2-3: 12px;
-                --row-gap-3-4: 3px;
-                --row-gap-4-5: 3px;
-                --row-gap-5-6: 3px;
-            }
-        }
-        
-        @media (max-width: 600px) {
-            :root {
-                /* 进一步缩小卡片尺寸和间距 */
-                --card-width: 30px;
-                --card-height: 30px;
-                --column-gap-1-2: 2px;
-                --column-gap-2-3: 2px;
-                --column-gap-3-4: 2px;
-                --column-gap-4-5: 8px;
-                --column-gap-5-6: 2px;
-                --column-gap-6-7: 2px;
-                --column-gap-7-8: 2px;
-                --column-gap-8-9: 8px;
-                --column-gap-9-10: 2px;
-                --column-gap-10-11: 2px;
-                --column-gap-11-12: 2px;
-                --row-gap-1-2: 8px;
-                --row-gap-2-3: 8px;
-                --row-gap-3-4: 2px;
-                --row-gap-4-5: 2px;
-                --row-gap-5-6: 2px;
-            }
-        }
+        /* 移除会改变列数的响应式断点，只保留600px时的大小调整 */
+        /* 确保网格始终保持12列结构，通过水平滚动适应不同屏幕宽度 */
     </style>
 </head>
 <body>
@@ -1118,38 +1089,38 @@
             const kingCards = document.querySelectorAll('.grid-container > div');
             kingCards.forEach(card => {
                 if (card.textContent.includes('小王')) {
-                    card.style.gridColumn = '11';
+                    card.style.gridColumn = '6';
                     card.style.gridRow = '1';
                 } else if (card.textContent.includes('大王')) {
-                    card.style.gridColumn = '13';
+                    card.style.gridColumn = '7';
                     card.style.gridRow = '1';
                 }
             });
             
-            // 第二行：2的四张牌（中间四个）
+            // 第二行：2的四张牌（中间四个，第5-8格）
             const twoCards = document.querySelectorAll('.grid-container .two-item');
             if (twoCards.length >= 4) {
-                twoCards[0].style.gridColumn = '9';
-                twoCards[0].style.gridRow = '3';
-                twoCards[1].style.gridColumn = '11';
-                twoCards[1].style.gridRow = '3';
-                twoCards[2].style.gridColumn = '13';
-                twoCards[2].style.gridRow = '3';
-                twoCards[3].style.gridColumn = '15';
-                twoCards[3].style.gridRow = '3';
+                twoCards[0].style.gridColumn = '5';
+                twoCards[0].style.gridRow = '2';
+                twoCards[1].style.gridColumn = '6';
+                twoCards[1].style.gridRow = '2';
+                twoCards[2].style.gridColumn = '7';
+                twoCards[2].style.gridRow = '2';
+                twoCards[3].style.gridColumn = '8';
+                twoCards[3].style.gridRow = '2';
             }
         }
         
         // 更新为右对齐布局
         function updateLayoutRightAlign() {
-            // 第一行：大小王（小王第9格，大王第12格）
+            // 第一行：大小王（小王第11格，大王第12格）
             const kingCards = document.querySelectorAll('.grid-container > div');
             kingCards.forEach(card => {
                 if (card.textContent.includes('小王')) {
-                    card.style.gridColumn = '17'; // 第9列
+                    card.style.gridColumn = '11'; // 第11列
                     card.style.gridRow = '1';
                 } else if (card.textContent.includes('大王')) {
-                    card.style.gridColumn = '23'; // 第12列
+                    card.style.gridColumn = '12'; // 第12列
                     card.style.gridRow = '1';
                 }
             });
@@ -1157,14 +1128,14 @@
             // 第二行：2的四张牌（第9-12格）
             const twoCards = document.querySelectorAll('.grid-container .two-item');
             if (twoCards.length >= 4) {
-                twoCards[0].style.gridColumn = '17'; // 第9列
-                twoCards[0].style.gridRow = '3';
-                twoCards[1].style.gridColumn = '19'; // 第10列
-                twoCards[1].style.gridRow = '3';
-                twoCards[2].style.gridColumn = '21'; // 第11列
-                twoCards[2].style.gridRow = '3';
-                twoCards[3].style.gridColumn = '23'; // 第12列
-                twoCards[3].style.gridRow = '3';
+                twoCards[0].style.gridColumn = '9'; // 第9列
+                twoCards[0].style.gridRow = '2';
+                twoCards[1].style.gridColumn = '10'; // 第10列
+                twoCards[1].style.gridRow = '2';
+                twoCards[2].style.gridColumn = '11'; // 第11列
+                twoCards[2].style.gridRow = '2';
+                twoCards[3].style.gridColumn = '12'; // 第12列
+                twoCards[3].style.gridRow = '2';
             }
         }
         
