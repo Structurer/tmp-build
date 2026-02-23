@@ -1254,6 +1254,7 @@
                 scrollSpeed: 2, // 默认滚动速度
                 gameTimer: null,
                 startTime: 0,
+                lastTimestamp: 0, // 添加时间戳属性，用于计算delta time
                 isFirstCorrect: true // 是否是第一次正确点击
             };
             
@@ -1300,6 +1301,7 @@
                 scrollSpeed: 2, // 默认滚动速度
                 gameTimer: null,
                 startTime: 0,
+                lastTimestamp: 0, // 添加时间戳属性，用于计算delta time
                 isFirstCorrect: true // 是否是第一次正确点击
             };
             
@@ -1385,13 +1387,20 @@
         }
 
         // 游戏主循环
-        function gameLoop() {
+        function gameLoop(timestamp) {
             if (!gameState.isPlaying) return;
+            
+            // 计算时间差（delta time）
+            if (!gameState.lastTimestamp) {
+                gameState.lastTimestamp = timestamp;
+            }
+            const deltaTime = (timestamp - gameState.lastTimestamp) / 16.666; // 标准化到60fps
+            gameState.lastTimestamp = timestamp;
             
             const sequenceContainer = document.getElementById('cardSequence');
             
-            // 更新滚动位置
-            gameState.scrollPosition += gameState.scrollSpeed * gameState.speed;
+            // 更新滚动位置，使用deltaTime确保不同帧率下速度一致
+            gameState.scrollPosition += gameState.scrollSpeed * gameState.speed * deltaTime;
             
             // 更新容器滚动位置
             sequenceContainer.scrollLeft = gameState.scrollPosition;
