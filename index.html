@@ -486,10 +486,6 @@
                 <div>错误次数: <span id="gameWrong">0</span></div>
                 <div>当前速度: <span id="gameSpeed">1.0x</span></div>
             </div>
-            <div class="game-message" id="gameMessage" style="display: none;">
-                <h4 id="messageText">游戏失败！</h4>
-                <button onclick="restartGame()">重新开始</button>
-            </div>
         </div>
         
         <!-- 扑克牌编码映射（位置记忆法） -->
@@ -577,6 +573,12 @@
             <div class="grid-item" onclick="toggleStatus(this)">* Q</div>
             <div class="grid-item" onclick="toggleStatus(this)">* K</div>
             <div class="grid-item" onclick="toggleStatus(this)">* A</div>
+        </div>
+        
+        <!-- 游戏消息提示（放在卡牌网格下方） -->
+        <div class="game-message" id="gameMessage" style="display: none;">
+            <h4 id="messageText">游戏失败！</h4>
+            <button onclick="restartGame()">重新开始</button>
         </div>
     </div>
     
@@ -1191,15 +1193,18 @@
             gameMode = !gameMode;
             const button = document.getElementById('gameModeButton');
             const gameModeDiv = document.getElementById('gameMode');
+            const binaryCodeDiv = document.getElementById('binaryCode');
             
             if (gameMode) {
                 button.textContent = '退出游戏';
                 gameModeDiv.style.display = 'block';
+                binaryCodeDiv.style.display = 'none'; // 进入游戏模式时隐藏二进制编码框
                 // 进入游戏模式后直接初始化游戏状态并生成卡片序列，但不开始滚动
                 initGameMode();
             } else {
                 button.textContent = '游戏模式';
                 gameModeDiv.style.display = 'none';
+                binaryCodeDiv.style.display = 'block'; // 退出游戏模式时显示二进制编码框
                 endGame();
             }
         }
@@ -1371,9 +1376,13 @@
             // 获取容器宽度
             const containerWidth = sequenceContainer.offsetWidth;
             
-            // 检查是否失败（高亮框移出视野）
-            // 调整判断逻辑，考虑容器宽度，确保在移动设备上有足够的反应时间
-            if (gameState.scrollPosition > targetCardPosition + containerWidth/2) {
+            // 计算高亮卡片左侧与显示窗口左侧的距离
+            const cardLeft = targetCardPosition;
+            const distance = cardLeft - gameState.scrollPosition;
+            
+            // 直接判断：当卡片左侧边缘完全移出窗口右侧时，触发游戏失败
+            // 当distance < -cardWidth时，说明卡片已经完全移出窗口
+            if (distance < -cardWidth) {
                 gameOver(false);
                 return;
             }
@@ -1575,6 +1584,9 @@
                 
                 gameState.correctCount++;
                 gameState.currentIndex++;
+                
+                // 重置最小距离记录，确保下一张卡片的判断不受影响
+                gameState.minDistance = Infinity;
                 
                 // 不需要强制使高亮框居中，让滚动条按照正常速度滚动
                 
