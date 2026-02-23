@@ -1188,6 +1188,9 @@
         // 初始化卡片映射
         initCardMap();
         
+        // 观察器实例
+        let observer;
+        
         // 游戏模式切换
         function toggleGameMode() {
             gameMode = !gameMode;
@@ -1207,6 +1210,26 @@
                 binaryCodeDiv.style.display = 'block'; // 退出游戏模式时显示二进制编码框
                 endGame();
             }
+        }
+        
+        // 初始化Intersection Observer
+        function initObserver() {
+            // 配置观察器
+            const options = {
+                root: document.getElementById('cardSequence'), // 滚动容器
+                rootMargin: '0px', // 边距
+                threshold: 0.3 // 当元素30%不在视口中时触发
+            };
+            
+            // 创建观察器
+            observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    // 当高亮卡片不在视口中，且游戏正在进行时，触发游戏失败
+                    if (!entry.isIntersecting && gameState.isPlaying) {
+                        gameOver(false);
+                    }
+                });
+            }, options);
         }
         
         // 初始化游戏模式
@@ -1233,6 +1256,9 @@
                 startTime: 0,
                 isFirstCorrect: true // 是否是第一次正确点击
             };
+            
+            // 初始化Intersection Observer
+            initObserver();
             
             // 生成随机排列（Fisher-Yates洗牌算法）
             gameState.shuffledCards = [...cardMap].sort(() => Math.random() - 0.5);
@@ -1276,6 +1302,9 @@
                 startTime: 0,
                 isFirstCorrect: true // 是否是第一次正确点击
             };
+            
+            // 初始化Intersection Observer
+            initObserver();
             
             // 生成随机排列（Fisher-Yates洗牌算法）
             gameState.shuffledCards = [...cardMap].sort(() => Math.random() - 0.5);
@@ -1360,32 +1389,9 @@
             if (!gameState.isPlaying) return;
             
             const sequenceContainer = document.getElementById('cardSequence');
-            const sequenceCards = document.querySelectorAll('.sequence-card');
             
             // 更新滚动位置
             gameState.scrollPosition += gameState.scrollSpeed * gameState.speed;
-            
-            // 更可靠的卡片宽度计算：直接获取实际卡片元素的宽度
-            let cardWidth = 50; // 默认值
-            if (sequenceCards.length > 0) {
-                cardWidth = sequenceCards[0].offsetWidth + 10; // 实际卡片宽度 + 间距
-            }
-            const targetCardIndex = gameState.currentIndex + 2; // +2 因为前面有2个占位卡片
-            const targetCardPosition = targetCardIndex * cardWidth;
-            
-            // 获取容器宽度
-            const containerWidth = sequenceContainer.offsetWidth;
-            
-            // 计算高亮卡片左侧与显示窗口左侧的距离
-            const cardLeft = targetCardPosition;
-            const distance = cardLeft - gameState.scrollPosition;
-            
-            // 直接判断：当卡片左侧边缘完全移出窗口右侧时，触发游戏失败
-            // 当distance < -cardWidth时，说明卡片已经完全移出窗口
-            if (distance < -cardWidth) {
-                gameOver(false);
-                return;
-            }
             
             // 更新容器滚动位置
             sequenceContainer.scrollLeft = gameState.scrollPosition;
@@ -1464,6 +1470,17 @@
             
             // 更新卡片序列
             updateCardSequence();
+            
+            // 停止观察之前的卡片
+            if (observer) {
+                observer.disconnect();
+            }
+            
+            // 开始观察当前高亮卡片
+            const currentCard = document.querySelector('.sequence-card.current');
+            if (currentCard && observer) {
+                observer.observe(currentCard);
+            }
         }
         
         // 检查用户点击的卡片是否正确
