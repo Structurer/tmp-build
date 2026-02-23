@@ -1360,13 +1360,20 @@
             // 更新滚动位置
             gameState.scrollPosition += gameState.scrollSpeed * gameState.speed;
             
-            // 计算当前卡片位置
-            const cardWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--card-width')) + 10; // 卡片宽度 + 间距
+            // 更可靠的卡片宽度计算：直接获取实际卡片元素的宽度
+            let cardWidth = 50; // 默认值
+            if (sequenceCards.length > 0) {
+                cardWidth = sequenceCards[0].offsetWidth + 10; // 实际卡片宽度 + 间距
+            }
             const targetCardIndex = gameState.currentIndex + 2; // +2 因为前面有2个占位卡片
             const targetCardPosition = targetCardIndex * cardWidth;
             
+            // 获取容器宽度
+            const containerWidth = sequenceContainer.offsetWidth;
+            
             // 检查是否失败（高亮框移出视野）
-            if (gameState.scrollPosition > targetCardPosition + cardWidth) {
+            // 调整判断逻辑，考虑容器宽度，确保在移动设备上有足够的反应时间
+            if (gameState.scrollPosition > targetCardPosition + containerWidth/2) {
                 gameOver(false);
                 return;
             }
@@ -1374,8 +1381,11 @@
             // 更新容器滚动位置
             sequenceContainer.scrollLeft = gameState.scrollPosition;
             
-            // 逐渐增加速度
-            gameState.speed = gameState.baseSpeed + (gameState.correctCount * gameState.acceleration);
+            // 逐渐增加速度，但设置合理的上限
+            gameState.speed = Math.min(
+                gameState.baseSpeed + (gameState.correctCount * gameState.acceleration),
+                3.0 // 最大速度限制
+            );
             document.getElementById('gameSpeed').textContent = gameState.speed.toFixed(1) + 'x';
             
             // 继续游戏循环
