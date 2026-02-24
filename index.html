@@ -1199,7 +1199,10 @@
             singleButton.disabled = false;
             singleButton.style.backgroundColor = '#ff9800';
             singleButton.onclick = pauseGame;
-            loopButton.disabled = true;
+            loopButton.textContent = '循环训练';
+            loopButton.disabled = false;
+            loopButton.style.backgroundColor = '#4CAF50';
+            loopButton.onclick = startLoopGame;
             
             // 开始自动游戏
             startAutoGame();
@@ -1223,7 +1226,10 @@
             loopButton.disabled = false;
             loopButton.style.backgroundColor = '#ff9800';
             loopButton.onclick = pauseGame;
-            singleButton.disabled = true;
+            singleButton.textContent = '单次训练';
+            singleButton.disabled = false;
+            singleButton.style.backgroundColor = '#4CAF50';
+            singleButton.onclick = startSingleGame;
             
             // 开始自动游戏
             startAutoGame();
@@ -1249,10 +1255,18 @@
                 loopButton.textContent = '继续';
                 loopButton.style.backgroundColor = '#4CAF50';
                 loopButton.onclick = resumeGame;
+                singleButton.textContent = '单次训练';
+                singleButton.disabled = false;
+                singleButton.style.backgroundColor = '#4CAF50';
+                singleButton.onclick = startSingleGame;
             } else {
                 singleButton.textContent = '继续';
                 singleButton.style.backgroundColor = '#4CAF50';
                 singleButton.onclick = resumeGame;
+                loopButton.textContent = '循环训练';
+                loopButton.disabled = false;
+                loopButton.style.backgroundColor = '#4CAF50';
+                loopButton.onclick = startLoopGame;
             }
         }
         
@@ -1270,10 +1284,18 @@
                 loopButton.textContent = '暂停';
                 loopButton.style.backgroundColor = '#ff9800';
                 loopButton.onclick = pauseGame;
+                singleButton.textContent = '单次训练';
+                singleButton.disabled = false;
+                singleButton.style.backgroundColor = '#4CAF50';
+                singleButton.onclick = startSingleGame;
             } else {
                 singleButton.textContent = '暂停';
                 singleButton.style.backgroundColor = '#ff9800';
                 singleButton.onclick = pauseGame;
+                loopButton.textContent = '循环训练';
+                loopButton.disabled = false;
+                loopButton.style.backgroundColor = '#4CAF50';
+                loopButton.onclick = startLoopGame;
             }
             
             // 重新开始游戏循环
