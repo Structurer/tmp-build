@@ -24,32 +24,18 @@
             --card-padding: 0px; /* 卡片内边距 */
         }
         
-        /* 响应式设计 - 在800像素以下使用vw单位实现等比例缩放 */
-        @media (max-width: 800px) {
-            :root {
-                /* 间距参数 - 使用vw单位，实现等比例缩放 */
-                --column-gap: 0.5vw; /* 列间间距 */
-                --row-gap: 0.5vw; /* 行间间距 */
-                --special-gap: 2vw; /* 特殊间距列宽度 */
-                
-                /* 卡片尺寸参数 - 使用vw单位，实现等比例缩放 */
-                /* 计算方式：(100vw - 3个特殊间距列 - 14个列间间距) / 15个卡片列 */
-                --card-width: 4.8vw; /* 减小卡片宽度以适应15列 + 3个特殊间距列 */
-                --card-height: 4.8vw; /* 减小卡片宽度以适应15列 + 3个特殊间距列 */
-            }
-        }
-        
-        /* 进一步优化小屏幕显示 */
-        @media (max-width: 600px) {
+        /* 响应式设计 - 在600像素以下使用vw单位实现等比例缩放 */
+        @media (max-width: 900px) {
             :root {
                 --column-gap: 0.4vw; /* 列间间距 */
                 --row-gap: 0.4vw; /* 行间间距 */
-                --special-gap: 1.5vw; /* 特殊间距列宽度 */
-                /* 计算方式：(100vw - 3个特殊间距列 - 14个列间间距) / 15个卡片列 */
-                --card-width: 4.3vw; /* 进一步减小卡片宽度 */
-                --card-height: 4.3vw; /* 进一步减小卡片宽度 */
+                --special-gap: 1.2vw; /* 特殊间距列宽度 */
+                --card-width: 5.2vw; /* 进一步减小卡片宽度 */
+                --card-height: 5.5vw; /* 进一步减小卡片宽度 */
             }
         }
+        
+
         
         body {
             font-family: Arial, sans-serif;
