@@ -13,34 +13,10 @@
         
         /* 布局参数 - 使用固定值作为默认值（800像素以上） */
         :root {
-            /* 间距参数 - 可调整的参数 */
-            --special-gap: 20px; /* 特殊列间距（第4-5、8-9、12-13列之间） */
-            --normal-gap: 5px; /* 普通间距（其他列间距和所有行间距） */
-            
-            /* 列间距参数 */
-            --column-gap: var(--normal-gap); /* 基本列间间距 */
-            --column-gap-1-2: var(--normal-gap); /* 第1列和第2列之间的间距 */
-            --column-gap-2-3: var(--normal-gap); /* 第2列和第3列之间的间距 */
-            --column-gap-3-4: var(--normal-gap); /* 第3列和第4列之间的间距 */
-            --column-gap-4-5: var(--special-gap); /* 第4列和第5列之间的间距 */
-            --column-gap-5-6: var(--normal-gap); /* 第5列和第6列之间的间距 */
-            --column-gap-6-7: var(--normal-gap); /* 第6列和第7列之间的间距 */
-            --column-gap-7-8: var(--normal-gap); /* 第7列和第8列之间的间距 */
-            --column-gap-8-9: var(--special-gap); /* 第8列和第9列之间的间距 */
-            --column-gap-9-10: var(--normal-gap); /* 第9列和第10列之间的间距 */
-            --column-gap-10-11: var(--normal-gap); /* 第10列和第11列之间的间距 */
-            --column-gap-11-12: var(--normal-gap); /* 第11列和第12列之间的间距 */
-            --column-gap-12-13: var(--special-gap); /* 第12列和第13列之间的间距 */
-            --column-gap-13-14: var(--normal-gap); /* 第13列和第14列之间的间距 */
-            --column-gap-14-15: var(--normal-gap); /* 第14列和第15列之间的间距 */
-
-            /* 行间距参数 */
-            --row-gap: var(--normal-gap); /* 基本行间间距 */
-            --row-gap-1-2: var(--normal-gap); /* 第1行和第2行之间的间距 */
-            --row-gap-2-3: var(--normal-gap); /* 第2行和第3行之间的间距 */
-            --row-gap-3-4: var(--normal-gap); /* 第3行和第4行之间的间距 */
-            --row-gap-4-5: var(--normal-gap); /* 第4行和第5行之间的间距 */
-            --row-gap-5-6: var(--normal-gap); /* 第5行和第6行之间的间距 */
+            /* 间距参数 */
+            --column-gap: 5px; /* 列间间距 */
+            --row-gap: 5px; /* 行间间距 */
+            --special-gap: 10px; /* 特殊间距列宽度 */
             
             /* 卡片尺寸参数 */
             --card-width: 50px; /* 卡片的宽度 */
@@ -52,32 +28,9 @@
         @media (max-width: 800px) {
             :root {
                 /* 间距参数 - 使用vw单位，实现等比例缩放 */
-                --special-gap: 2vw; /* 特殊列间距（第4-5、8-9、12-13列之间） */
-                --normal-gap: 0.5vw; /* 普通间距（其他列间距和部分行间距） */
-                
-                /* 列间距参数 */
-                --column-gap: var(--normal-gap); /* 基本列间间距 */
-                --column-gap-1-2: var(--normal-gap);
-                --column-gap-2-3: var(--normal-gap);
-                --column-gap-3-4: var(--normal-gap);
-                --column-gap-4-5: var(--special-gap); /* 第4列和第5列之间的间距 */
-                --column-gap-5-6: var(--normal-gap);
-                --column-gap-6-7: var(--normal-gap);
-                --column-gap-7-8: var(--normal-gap);
-                --column-gap-8-9: var(--special-gap); /* 第8列和第9列之间的间距 */
-                --column-gap-9-10: var(--normal-gap);
-                --column-gap-10-11: var(--normal-gap);
-                --column-gap-11-12: var(--normal-gap);
-                --column-gap-12-13: var(--special-gap); /* 第12列和第13列之间的间距 */
-                --column-gap-13-14: var(--normal-gap);
-                --column-gap-14-15: var(--normal-gap);
-
-                --row-gap: var(--normal-gap); /* 基本行间间距 */
-                --row-gap-1-2: 2vw; /* 第1行和第2行之间的间距 */
-                --row-gap-2-3: 2vw; /* 第2行和第3行之间的间距 */
-                --row-gap-3-4: var(--normal-gap);
-                --row-gap-4-5: var(--normal-gap);
-                --row-gap-5-6: var(--normal-gap);
+                --column-gap: 0.5vw; /* 列间间距 */
+                --row-gap: 0.5vw; /* 行间间距 */
+                --special-gap: 2vw; /* 特殊间距列宽度 */
                 
                 /* 卡片尺寸参数 - 使用vw单位，实现等比例缩放 */
                 --card-width: 5.5vw; /* 减小卡片宽度以适应15列 */
@@ -88,8 +41,9 @@
         /* 进一步优化小屏幕显示 */
         @media (max-width: 600px) {
             :root {
-                --special-gap: 1.5vw; /* 特殊列间距（第4-5、8-9、12-13列之间） */
-                --normal-gap: 0.4vw; /* 普通间距（其他列间距和部分行间距） */
+                --column-gap: 0.4vw; /* 列间间距 */
+                --row-gap: 0.4vw; /* 行间间距 */
+                --special-gap: 1.5vw; /* 特殊间距列宽度 */
                 --card-width: 5vw; /* 进一步减小卡片宽度 */
                 --card-height: 5vw; /* 进一步减小卡片宽度 */
             }
@@ -152,7 +106,7 @@
         }
         
         .speed-control input[type="range"] {
-            width: 100px;
+            width: 150px;
             cursor: pointer;
         }
         
@@ -305,13 +259,19 @@
         /* 扑克牌编码映射（位置记忆法） */
         .grid-container {
             display: grid;
-            /* 明确设置15列的结构，不会重组 */
-            grid-template-columns: repeat(15, var(--card-width));
+            /* 明确设置15列的结构，加上3个特殊间距列，共18列 */
+            grid-template-columns: 
+                repeat(4, var(--card-width)) 
+                var(--special-gap) 
+                repeat(4, var(--card-width)) 
+                var(--special-gap) 
+                repeat(4, var(--card-width)) 
+                var(--special-gap) 
+                repeat(3, var(--card-width));
             /* 明确设置4行的结构 */
             grid-template-rows: repeat(4, var(--card-height));
-            /* 设置列间距和行间距 */
-            column-gap: var(--normal-gap);
-            row-gap: var(--normal-gap);
+            /* 设置行间距 */
+            row-gap: 0;
             /* 居中显示 */
             margin: 0 auto;
             margin-bottom: 20px;
@@ -355,16 +315,7 @@
             cursor: pointer;
             box-sizing: border-box; /* 确保padding和border不影响卡片尺寸 */
         }
-        
-        /* 特殊列间距 */
-        .grid-container > div:nth-child(15n + 4),
-        .grid-container > div:nth-child(15n + 8),
-        .grid-container > div:nth-child(15n + 12) {
-            margin-right: calc(var(--special-gap) - var(--normal-gap));
-        }
-        
 
-        
         .grid-item:hover {
             background-color: #e0e0e0;
         }
@@ -407,6 +358,15 @@
         
         .empty-card:hover {
             background-color: #e0e0e0 !important;
+        }
+        
+        /* 特殊间距列样式 */
+        .special-gap-column {
+            background-color: transparent !important;
+            border: none !important;
+            cursor: default !important;
+            color: transparent !important;
+            pointer-events: none;
         }
     </style>
 </head>
@@ -451,14 +411,17 @@
             <div class="grid-item" onclick="toggleStatus(this)">4</div>
             <div class="grid-item" onclick="toggleStatus(this)">5</div>
             <div class="grid-item" onclick="toggleStatus(this)">6</div>
+            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
             <div class="grid-item" onclick="toggleStatus(this)">7</div>
             <div class="grid-item" onclick="toggleStatus(this)">8</div>
             <div class="grid-item" onclick="toggleStatus(this)">9</div>
             <div class="grid-item" onclick="toggleStatus(this)">10</div>
+            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
             <div class="grid-item" onclick="toggleStatus(this)">J</div>
             <div class="grid-item" onclick="toggleStatus(this)">Q</div>
             <div class="grid-item" onclick="toggleStatus(this)">K</div>
             <div class="grid-item" onclick="toggleStatus(this)">A</div>
+            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
             <div class="grid-item two-item" onclick="toggleStatus(this)">2</div>
             <div class="grid-item empty-card"></div>
             <div class="grid-item empty-card"></div>
@@ -468,14 +431,17 @@
             <div class="grid-item" onclick="toggleStatus(this)">4</div>
             <div class="grid-item" onclick="toggleStatus(this)">5</div>
             <div class="grid-item" onclick="toggleStatus(this)">6</div>
+            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
             <div class="grid-item" onclick="toggleStatus(this)">7</div>
             <div class="grid-item" onclick="toggleStatus(this)">8</div>
             <div class="grid-item" onclick="toggleStatus(this)">9</div>
             <div class="grid-item" onclick="toggleStatus(this)">10</div>
+            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
             <div class="grid-item" onclick="toggleStatus(this)">J</div>
             <div class="grid-item" onclick="toggleStatus(this)">Q</div>
             <div class="grid-item" onclick="toggleStatus(this)">K</div>
             <div class="grid-item" onclick="toggleStatus(this)">A</div>
+            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
             <div class="grid-item two-item" onclick="toggleStatus(this)">2</div>
             <div class="grid-item empty-card"></div>
             <div class="grid-item empty-card"></div>
@@ -485,14 +451,17 @@
             <div class="grid-item" onclick="toggleStatus(this)">4</div>
             <div class="grid-item" onclick="toggleStatus(this)">5</div>
             <div class="grid-item" onclick="toggleStatus(this)">6</div>
+            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
             <div class="grid-item" onclick="toggleStatus(this)">7</div>
             <div class="grid-item" onclick="toggleStatus(this)">8</div>
             <div class="grid-item" onclick="toggleStatus(this)">9</div>
             <div class="grid-item" onclick="toggleStatus(this)">10</div>
+            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
             <div class="grid-item" onclick="toggleStatus(this)">J</div>
             <div class="grid-item" onclick="toggleStatus(this)">Q</div>
             <div class="grid-item" onclick="toggleStatus(this)">K</div>
             <div class="grid-item" onclick="toggleStatus(this)">A</div>
+            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
             <div class="grid-item two-item" onclick="toggleStatus(this)">2</div>
             <div class="grid-item empty-card"></div>
             <div class="grid-item empty-card"></div>
@@ -502,14 +471,17 @@
             <div class="grid-item" onclick="toggleStatus(this)">4</div>
             <div class="grid-item" onclick="toggleStatus(this)">5</div>
             <div class="grid-item" onclick="toggleStatus(this)">6</div>
+            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
             <div class="grid-item" onclick="toggleStatus(this)">7</div>
             <div class="grid-item" onclick="toggleStatus(this)">8</div>
             <div class="grid-item" onclick="toggleStatus(this)">9</div>
             <div class="grid-item" onclick="toggleStatus(this)">10</div>
+            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
             <div class="grid-item" onclick="toggleStatus(this)">J</div>
             <div class="grid-item" onclick="toggleStatus(this)">Q</div>
             <div class="grid-item" onclick="toggleStatus(this)">K</div>
             <div class="grid-item" onclick="toggleStatus(this)">A</div>
+            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
             <div class="grid-item two-item" onclick="toggleStatus(this)">2</div>
             <div class="grid-item top-item" onclick="toggleStatus(this)">小</div>
             <div class="grid-item top-item" onclick="toggleStatus(this)">大</div>
