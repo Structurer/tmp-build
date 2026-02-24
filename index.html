@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>游戏模式</title>
+    <title>记忆训练</title>
     <style>
         * {
             margin: 0;
@@ -13,29 +13,34 @@
         
         /* 布局参数 - 使用固定值作为默认值（800像素以上） */
         :root {
-            /* 间距参数 */
-            --column-gap: 5px; /* 基本列间间距 */
-            --column-gap-1-2: 5px; /* 第1列和第2列之间的间距 */
-            --column-gap-2-3: 5px; /* 第2列和第3列之间的间距 */
-            --column-gap-3-4: 5px; /* 第3列和第4列之间的间距 */
-            --column-gap-4-5: 20px; /* 第4列和第5列之间的间距 */
-            --column-gap-5-6: 5px; /* 第5列和第6列之间的间距 */
-            --column-gap-6-7: 5px; /* 第6列和第7列之间的间距 */
-            --column-gap-7-8: 5px; /* 第7列和第8列之间的间距 */
-            --column-gap-8-9: 20px; /* 第8列和第9列之间的间距 */
-            --column-gap-9-10: 5px; /* 第9列和第10列之间的间距 */
-            --column-gap-10-11: 5px; /* 第10列和第11列之间的间距 */
-            --column-gap-11-12: 5px; /* 第11列和第12列之间的间距 */
-            --column-gap-12-13: 5px; /* 第12列和第13列之间的间距 */
-            --column-gap-13-14: 5px; /* 第13列和第14列之间的间距 */
-            --column-gap-14-15: 5px; /* 第14列和第15列之间的间距 */
+            /* 间距参数 - 可调整的参数 */
+            --special-gap: 20px; /* 特殊列间距（第4-5、8-9、12-13列之间） */
+            --normal-gap: 5px; /* 普通间距（其他列间距和所有行间距） */
+            
+            /* 列间距参数 */
+            --column-gap: var(--normal-gap); /* 基本列间间距 */
+            --column-gap-1-2: var(--normal-gap); /* 第1列和第2列之间的间距 */
+            --column-gap-2-3: var(--normal-gap); /* 第2列和第3列之间的间距 */
+            --column-gap-3-4: var(--normal-gap); /* 第3列和第4列之间的间距 */
+            --column-gap-4-5: var(--special-gap); /* 第4列和第5列之间的间距 */
+            --column-gap-5-6: var(--normal-gap); /* 第5列和第6列之间的间距 */
+            --column-gap-6-7: var(--normal-gap); /* 第6列和第7列之间的间距 */
+            --column-gap-7-8: var(--normal-gap); /* 第7列和第8列之间的间距 */
+            --column-gap-8-9: var(--special-gap); /* 第8列和第9列之间的间距 */
+            --column-gap-9-10: var(--normal-gap); /* 第9列和第10列之间的间距 */
+            --column-gap-10-11: var(--normal-gap); /* 第10列和第11列之间的间距 */
+            --column-gap-11-12: var(--normal-gap); /* 第11列和第12列之间的间距 */
+            --column-gap-12-13: var(--special-gap); /* 第12列和第13列之间的间距 */
+            --column-gap-13-14: var(--normal-gap); /* 第13列和第14列之间的间距 */
+            --column-gap-14-15: var(--normal-gap); /* 第14列和第15列之间的间距 */
 
-            --row-gap: 5px; /* 基本行间间距 */
-            --row-gap-1-2: 20px; /* 第1行和第2行之间的间距 */
-            --row-gap-2-3: 20px; /* 第2行和第3行之间的间距 */
-            --row-gap-3-4: 5px; /* 第3行和第4行之间的间距 */
-            --row-gap-4-5: 5px; /* 第4行和第5行之间的间距 */
-            --row-gap-5-6: 5px; /* 第5行和第6行之间的间距 */
+            /* 行间距参数 */
+            --row-gap: var(--normal-gap); /* 基本行间间距 */
+            --row-gap-1-2: var(--normal-gap); /* 第1行和第2行之间的间距 */
+            --row-gap-2-3: var(--normal-gap); /* 第2行和第3行之间的间距 */
+            --row-gap-3-4: var(--normal-gap); /* 第3行和第4行之间的间距 */
+            --row-gap-4-5: var(--normal-gap); /* 第4行和第5行之间的间距 */
+            --row-gap-5-6: var(--normal-gap); /* 第5行和第6行之间的间距 */
             
             /* 卡片尺寸参数 */
             --card-width: 50px; /* 卡片的宽度 */
@@ -47,28 +52,32 @@
         @media (max-width: 800px) {
             :root {
                 /* 间距参数 - 使用vw单位，实现等比例缩放 */
-                --column-gap: 0.5vw; /* 减小间距以适应15列 */
-                --column-gap-1-2: 0.5vw;
-                --column-gap-2-3: 0.5vw;
-                --column-gap-3-4: 0.5vw;
-                --column-gap-4-5: 2vw; /* 减小间距以适应15列 */
-                --column-gap-5-6: 0.5vw;
-                --column-gap-6-7: 0.5vw;
-                --column-gap-7-8: 0.5vw;
-                --column-gap-8-9: 2vw; /* 减小间距以适应15列 */
-                --column-gap-9-10: 0.5vw;
-                --column-gap-10-11: 0.5vw;
-                --column-gap-11-12: 0.5vw;
-                --column-gap-12-13: 0.5vw;
-                --column-gap-13-14: 0.5vw;
-                --column-gap-14-15: 0.5vw;
+                --special-gap: 2vw; /* 特殊列间距（第4-5、8-9、12-13列之间） */
+                --normal-gap: 0.5vw; /* 普通间距（其他列间距和部分行间距） */
+                
+                /* 列间距参数 */
+                --column-gap: var(--normal-gap); /* 基本列间间距 */
+                --column-gap-1-2: var(--normal-gap);
+                --column-gap-2-3: var(--normal-gap);
+                --column-gap-3-4: var(--normal-gap);
+                --column-gap-4-5: var(--special-gap); /* 第4列和第5列之间的间距 */
+                --column-gap-5-6: var(--normal-gap);
+                --column-gap-6-7: var(--normal-gap);
+                --column-gap-7-8: var(--normal-gap);
+                --column-gap-8-9: var(--special-gap); /* 第8列和第9列之间的间距 */
+                --column-gap-9-10: var(--normal-gap);
+                --column-gap-10-11: var(--normal-gap);
+                --column-gap-11-12: var(--normal-gap);
+                --column-gap-12-13: var(--special-gap); /* 第12列和第13列之间的间距 */
+                --column-gap-13-14: var(--normal-gap);
+                --column-gap-14-15: var(--normal-gap);
 
-                --row-gap: 0.5vw; /* 减小间距以适应15列 */
-                --row-gap-1-2: 2vw; /* 减小间距以适应15列 */
-                --row-gap-2-3: 2vw; /* 减小间距以适应15列 */
-                --row-gap-3-4: 0.5vw;
-                --row-gap-4-5: 0.5vw;
-                --row-gap-5-6: 0.5vw;
+                --row-gap: var(--normal-gap); /* 基本行间间距 */
+                --row-gap-1-2: 2vw; /* 第1行和第2行之间的间距 */
+                --row-gap-2-3: 2vw; /* 第2行和第3行之间的间距 */
+                --row-gap-3-4: var(--normal-gap);
+                --row-gap-4-5: var(--normal-gap);
+                --row-gap-5-6: var(--normal-gap);
                 
                 /* 卡片尺寸参数 - 使用vw单位，实现等比例缩放 */
                 --card-width: 5.5vw; /* 减小卡片宽度以适应15列 */
@@ -79,11 +88,10 @@
         /* 进一步优化小屏幕显示 */
         @media (max-width: 600px) {
             :root {
+                --special-gap: 1.5vw; /* 特殊列间距（第4-5、8-9、12-13列之间） */
+                --normal-gap: 0.4vw; /* 普通间距（其他列间距和部分行间距） */
                 --card-width: 5vw; /* 进一步减小卡片宽度 */
                 --card-height: 5vw; /* 进一步减小卡片宽度 */
-                --column-gap: 0.4vw; /* 进一步减小间距 */
-                --column-gap-4-5: 1.5vw; /* 进一步减小间距 */
-                --column-gap-8-9: 1.5vw; /* 进一步减小间距 */
             }
         }
         
@@ -302,8 +310,8 @@
             /* 明确设置4行的结构 */
             grid-template-rows: repeat(4, var(--card-height));
             /* 设置列间距和行间距 */
-            column-gap: var(--column-gap);
-            row-gap: var(--row-gap);
+            column-gap: var(--normal-gap);
+            row-gap: var(--normal-gap);
             /* 居中显示 */
             margin: 0 auto;
             margin-bottom: 20px;
@@ -346,6 +354,13 @@
             transition: background-color 0.3s ease;
             cursor: pointer;
             box-sizing: border-box; /* 确保padding和border不影响卡片尺寸 */
+        }
+        
+        /* 特殊列间距 */
+        .grid-container > div:nth-child(15n + 4),
+        .grid-container > div:nth-child(15n + 8),
+        .grid-container > div:nth-child(15n + 12) {
+            margin-right: calc(var(--special-gap) - var(--normal-gap));
         }
         
 
@@ -549,7 +564,7 @@
             let index = 1;
             for (const value of values) {
                 for (const suit of suits) {
-                    cardMap.push({ value: value, suit: suit, display: suit + ' ' + value, order: index });
+                    cardMap.push({ value: value, suit: suit, display: suit + value, order: index });
                     index++;
                 }
             }
