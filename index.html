@@ -567,6 +567,14 @@
             // 清除所有卡片的激活状态
             clearAllCards();
             
+            // 清除所有定时器和动画帧请求
+            if (gameState.gameTimer) {
+                cancelAnimationFrame(gameState.gameTimer);
+                gameState.gameTimer = null;
+            }
+            // 清除所有setTimeout定时器
+            window.clearTimeout(window.autoClickTimer);
+            
             // 保存当前速度设置
             const currentSpeed = gameState.speed || 1.0;
             
@@ -722,7 +730,8 @@
                 const minDelay = 50; // 最小延迟时间为50毫秒
                 adjustedDelay = Math.max(adjustedDelay, minDelay);
                 console.log(`当前速度: ${gameState.speed}x, 调整后的延迟: ${adjustedDelay}ms`);
-                setTimeout(startAutoClick, adjustedDelay);
+                // 存储定时器ID
+                window.autoClickTimer = setTimeout(startAutoClick, adjustedDelay);
             }
         }
         
