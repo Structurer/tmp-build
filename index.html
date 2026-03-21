@@ -16,7 +16,8 @@
             /* 间距参数 */
             --column-gap: 5px; /* 列间间距 */
             --row-gap: 5px; /* 行间间距 */
-            --special-gap: 10px; /* 特殊间距列宽度 */
+            --special-gap: 20px; /* 特殊间距列宽度 */
+            --blank-col-gap-default: 5px; /* 14个空白列的默认宽度 */
             
             /* 卡片尺寸参数 */
             --card-width: 50px; /* 卡片的宽度 */
@@ -30,6 +31,7 @@
                 --column-gap: 0.4vw; /* 列间间距 */
                 --row-gap: 0.4vw; /* 行间间距 */
                 --special-gap: 1.2vw; /* 特殊间距列宽度 */
+                --blank-col-gap-default: 0.4vw;
                 --card-width: 5.2vw; /* 进一步减小卡片宽度 */
                 --card-height: 5.5vw; /* 进一步减小卡片宽度 */
             }
@@ -253,17 +255,42 @@
         /* 扑克牌编码映射（位置记忆法） */
         .grid-container {
             display: grid;
-            /* 明确设置15列的结构，加上2个特殊间距列，共17列 */
+            /* 15个实际卡片列 + 14个空白间距列（共29列） */
             grid-template-columns: 
-                repeat(5, var(--card-width)) 
-                var(--special-gap) 
-                repeat(5, var(--card-width)) 
-                var(--special-gap) 
-                repeat(5, var(--card-width));
+                var(--card-width)
+                var(--blank-col-gap-1, var(--blank-col-gap-default))
+                var(--card-width)
+                var(--blank-col-gap-2, var(--blank-col-gap-default))
+                var(--card-width)
+                var(--blank-col-gap-3, var(--blank-col-gap-default))
+                var(--card-width)
+                var(--blank-col-gap-4, var(--blank-col-gap-default))
+                var(--card-width)
+                var(--blank-col-gap-5, var(--blank-col-gap-default))
+                var(--card-width)
+                var(--blank-col-gap-6, var(--blank-col-gap-default))
+                var(--card-width)
+                var(--blank-col-gap-7, var(--blank-col-gap-default))
+                var(--card-width)
+                var(--blank-col-gap-8, var(--blank-col-gap-default))
+                var(--card-width)
+                var(--blank-col-gap-9, var(--blank-col-gap-default))
+                var(--card-width)
+                var(--blank-col-gap-10, var(--blank-col-gap-default))
+                var(--card-width)
+                var(--blank-col-gap-11, var(--blank-col-gap-default))
+                var(--card-width)
+                var(--blank-col-gap-12, var(--blank-col-gap-default))
+                var(--card-width)
+                var(--blank-col-gap-13, var(--blank-col-gap-default))
+                var(--card-width)
+                var(--blank-col-gap-14, var(--blank-col-gap-default))
+                var(--card-width);
             /* 明确设置5行的结构（含顶部空白行） */
             grid-template-rows: repeat(5, var(--card-height));
-            /* 设置行间距 */
-            row-gap: 0;
+            /* 行间距与列间距分离：列间距由14个空白列控制 */
+            row-gap: var(--row-gap);
+            column-gap: 0;
             /* 居中显示 */
             margin: 0 auto;
             margin-bottom: 20px;
@@ -379,6 +406,15 @@
             cursor: default !important;
             color: transparent !important;
             pointer-events: none;
+        }
+
+        .gap-cell {
+            background-color: transparent !important;
+            border: none !important;
+            cursor: default !important;
+            color: transparent !important;
+            pointer-events: none;
+            width: auto !important;
         }
     </style>
 </head>
@@ -517,6 +553,15 @@
     </div>
     
     <script>
+        // =========================
+        // 布局参数（集中定义，方便查找）
+        // =========================
+        // 写入1~15的实际列号，表示该列后面的空白列使用特殊间距
+        // 例如 [5, 10] 会放大第5列后、第10列后的空白列
+        const layoutGapConfig = {
+            specialGapAfterColumns: new Set([12])
+        };
+
         // 游戏状态
         let gameMode = true; // 默认启用游戏模式
         let autoMode = false; // 自动执行模式
@@ -541,12 +586,79 @@
         // 观察器实例
         let observer;
 
-        const GRID_COLUMN_COUNT = 17;
+        const LEGACY_GRID_COLUMN_COUNT = 17;
+        const ACTUAL_CARD_COLUMN_COUNT = 15;
+        const GRID_COLUMN_COUNT = ACTUAL_CARD_COLUMN_COUNT * 2 - 1;
         const STATIC_TOP_ROWS = 5; // 顶部空白行 + 原有4行
+
         let valueToColumn = {};
         let autoClickTimeoutId = null;
         let advanceTimeoutId = null;
         let loopRestartTimeoutId = null;
+
+        function applyLayoutGapConfig() {
+            const rootStyle = document.documentElement.style;
+
+            // 先把14个空白列都回退到默认间距
+            for (let gapIdx = 1; gapIdx <= ACTUAL_CARD_COLUMN_COUNT - 1; gapIdx++) {
+                rootStyle.setProperty(`--blank-col-gap-${gapIdx}`, 'var(--blank-col-gap-default)');
+            }
+
+            // 集合中为1~15的实际列号；对应空白列索引等于该列号（最后一列后无空白列，自动跳过）
+            layoutGapConfig.specialGapAfterColumns.forEach(actualColumn => {
+                if (!Number.isInteger(actualColumn) || actualColumn < 1 || actualColumn > ACTUAL_CARD_COLUMN_COUNT) {
+                    return;
+                }
+
+                const gapIdx = actualColumn;
+                if (gapIdx <= ACTUAL_CARD_COLUMN_COUNT - 1) {
+                    rootStyle.setProperty(`--blank-col-gap-${gapIdx}`, 'var(--special-gap)');
+                }
+            });
+        }
+
+        // 将历史17列结构重建为15实列+14空白列（共29列）
+        function rebuildGridWithInterleavedGapColumns() {
+            const grid = document.querySelector('.grid-container');
+            if (!grid || grid.dataset.gapLayoutReady === '1') return;
+
+            const items = Array.from(grid.querySelectorAll(':scope > .grid-item'));
+            if (items.length === 0) return;
+
+            const legacyRows = Math.floor(items.length / LEGACY_GRID_COLUMN_COUNT);
+            if (legacyRows <= 0) return;
+
+            const realRows = [];
+            for (let row = 0; row < legacyRows; row++) {
+                const rowStart = row * LEGACY_GRID_COLUMN_COUNT;
+                const rowCells = items.slice(rowStart, rowStart + LEGACY_GRID_COLUMN_COUNT);
+                const realCells = rowCells.filter(cell => !cell.classList.contains('special-gap-column'));
+
+                if (realCells.length !== ACTUAL_CARD_COLUMN_COUNT) {
+                    return;
+                }
+
+                realRows.push(realCells);
+            }
+
+            grid.innerHTML = '';
+
+            realRows.forEach(realCells => {
+                realCells.forEach((cell, idx) => {
+                    cell.classList.remove('special-gap-column', 'gap-cell');
+                    grid.appendChild(cell);
+
+                    if (idx < realCells.length - 1) {
+                        const gapCell = document.createElement('div');
+                        gapCell.className = 'grid-item gap-cell';
+                        gapCell.setAttribute('aria-hidden', 'true');
+                        grid.appendChild(gapCell);
+                    }
+                });
+            });
+
+            grid.dataset.gapLayoutReady = '1';
+        }
 
         function captureGridBaseState() {
             const items = Array.from(document.querySelectorAll('.grid-container > .grid-item'));
@@ -560,7 +672,7 @@
         function restoreGridBaseState() {
             const items = Array.from(document.querySelectorAll('.grid-container > .grid-item'));
             items.forEach(cell => {
-                if (cell.classList.contains('special-gap-column')) {
+                if (cell.classList.contains('special-gap-column') || cell.classList.contains('gap-cell')) {
                     cell.textContent = '';
                     cell.dataset.cardValue = '';
                     cell.classList.remove('bead-filled', 'bead-pending', 'active', 'abacus-gap');
@@ -730,7 +842,10 @@
                 }
 
                 // 间距列跳过
-                if (columnCells[0] && columnCells[0].classList.contains('special-gap-column')) {
+                if (
+                    columnCells[0] &&
+                    (columnCells[0].classList.contains('special-gap-column') || columnCells[0].classList.contains('gap-cell'))
+                ) {
                     continue;
                 }
 
@@ -1189,6 +1304,7 @@
         // 检查用户点击的卡片是否正确
         function checkCardClick(cardElement) {
             if (!gameMode) return;
+            if (cardElement.classList.contains('gap-cell')) return;
             if (cardElement.classList.contains('abacus-gap')) return;
             
             const clickedCardText = cardElement.dataset.cardValue || cardElement.textContent.trim();
@@ -1375,6 +1491,12 @@
         
         // 初始化函数
         function init() {
+            // 根据集合参数批量应用特殊空白列间距
+            applyLayoutGapConfig();
+
+            // 运行时将原17列模板转换为15实列+14间距列
+            rebuildGridWithInterleavedGapColumns();
+
             // 记录网格基态，用于每次训练完整还原
             captureGridBaseState();
 
