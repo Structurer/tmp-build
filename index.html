@@ -130,8 +130,8 @@
         /* 卡片序列样式 */
         .card-sequence {
             display: flex;
-            gap: var(--column-gap-1-2);
-            padding: var(--column-gap-1-2);
+            gap: var(--column-gap);
+            padding: var(--column-gap);
             border: 1px solid #bbdefb;
             border-radius: 4px;
             background-color: white;
@@ -253,17 +253,15 @@
         /* 扑克牌编码映射（位置记忆法） */
         .grid-container {
             display: grid;
-            /* 明确设置15列的结构，加上3个特殊间距列，共18列 */
+            /* 明确设置15列的结构，加上2个特殊间距列，共17列 */
             grid-template-columns: 
-                repeat(4, var(--card-width)) 
+                repeat(5, var(--card-width)) 
                 var(--special-gap) 
-                repeat(4, var(--card-width)) 
+                repeat(5, var(--card-width)) 
                 var(--special-gap) 
-                repeat(4, var(--card-width)) 
-                var(--special-gap) 
-                repeat(3, var(--card-width));
-            /* 明确设置4行的结构 */
-            grid-template-rows: repeat(4, var(--card-height));
+                repeat(5, var(--card-width));
+            /* 明确设置5行的结构（含顶部空白行） */
+            grid-template-rows: repeat(5, var(--card-height));
             /* 设置行间距 */
             row-gap: 0;
             /* 居中显示 */
@@ -340,6 +338,27 @@
             background-color: #4caf50 !important;
             color: white !important;
         }
+
+        /* 算盘模式：初始实珠（蓝色） */
+        .bead-pending {
+            background-color: #1e88e5 !important;
+            border-color: #1976d2 !important;
+            color: white !important;
+        }
+
+        /* 算盘模式：已拨动实珠（绿色） */
+        .bead-filled {
+            background-color: #4caf50 !important;
+            border-color: #43a047 !important;
+            color: white !important;
+        }
+
+        /* 算盘模式：可移动空位 */
+        .abacus-gap {
+            background-color: #f5f5f5 !important;
+            border: 1px dashed #a5d6a7 !important;
+            color: transparent !important;
+        }
         
         /* 空白卡片样式 */
         .empty-card {
@@ -399,95 +418,102 @@
         
         <!-- 扑克牌编码映射（位置记忆法） -->
         <div class="grid-container">
-            <!-- 第一行：3-5, 6-8, 9-10, J-Q-K-A, 2, 空白, 空白 -->
+            <!-- 顶部空白行（算盘空位） -->
+            <div class="grid-item abacus-gap"></div>
+            <div class="grid-item abacus-gap"></div>
+            <div class="grid-item abacus-gap"></div>
+            <div class="grid-item abacus-gap"></div>
+            <div class="grid-item abacus-gap"></div>
+            <div class="grid-item special-gap-column"></div>
+            <div class="grid-item abacus-gap"></div>
+            <div class="grid-item abacus-gap"></div>
+            <div class="grid-item abacus-gap"></div>
+            <div class="grid-item abacus-gap"></div>
+            <div class="grid-item abacus-gap"></div>
+            <div class="grid-item special-gap-column"></div>
+            <div class="grid-item abacus-gap"></div>
+            <div class="grid-item abacus-gap"></div>
+            <div class="grid-item abacus-gap"></div>
+            <div class="grid-item abacus-gap"></div>
+            <div class="grid-item abacus-gap"></div>
+
+            <!-- 第一行：第5列与第6列、第10列与第11列之间有间距 -->
             <div class="grid-item" onclick="toggleStatus(this)">3</div>
             <div class="grid-item" onclick="toggleStatus(this)">4</div>
             <div class="grid-item" onclick="toggleStatus(this)">5</div>
             <div class="grid-item" onclick="toggleStatus(this)">6</div>
-            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
             <div class="grid-item" onclick="toggleStatus(this)">7</div>
+            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列：第5列与第6列之间 -->
             <div class="grid-item" onclick="toggleStatus(this)">8</div>
             <div class="grid-item" onclick="toggleStatus(this)">9</div>
             <div class="grid-item" onclick="toggleStatus(this)">10</div>
-            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
             <div class="grid-item" onclick="toggleStatus(this)">J</div>
             <div class="grid-item" onclick="toggleStatus(this)">Q</div>
+            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列：按含空白列计数位于第12列 -->
             <div class="grid-item" onclick="toggleStatus(this)">K</div>
             <div class="grid-item" onclick="toggleStatus(this)">A</div>
-            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
+            <div class="grid-item two-item" onclick="toggleStatus(this)">2</div>
+            <div class="grid-item empty-card"></div>
+            <div class="grid-item empty-card"></div>
+
+            <!-- 第二行：第5列与第6列、第10列与第11列之间有间距 -->
+            <div class="grid-item" onclick="toggleStatus(this)">3</div>
+            <div class="grid-item" onclick="toggleStatus(this)">4</div>
+            <div class="grid-item" onclick="toggleStatus(this)">5</div>
+            <div class="grid-item" onclick="toggleStatus(this)">6</div>
+            <div class="grid-item" onclick="toggleStatus(this)">7</div>
+            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列：第5列与第6列之间 -->
+            <div class="grid-item" onclick="toggleStatus(this)">8</div>
+            <div class="grid-item" onclick="toggleStatus(this)">9</div>
+            <div class="grid-item" onclick="toggleStatus(this)">10</div>
+            <div class="grid-item" onclick="toggleStatus(this)">J</div>
+            <div class="grid-item" onclick="toggleStatus(this)">Q</div>
+            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列：按含空白列计数位于第12列 -->
+            <div class="grid-item" onclick="toggleStatus(this)">K</div>
+            <div class="grid-item" onclick="toggleStatus(this)">A</div>
             <div class="grid-item two-item" onclick="toggleStatus(this)">2</div>
             <div class="grid-item empty-card"></div>
             <div class="grid-item empty-card"></div>
             
-            <!-- 第二行：3-5, 6-8, 9-10, J-Q-K-A, 2, 空白, 空白 -->
+            <!-- 第三行：第5列与第6列、第10列与第11列之间有间距 -->
             <div class="grid-item" onclick="toggleStatus(this)">3</div>
             <div class="grid-item" onclick="toggleStatus(this)">4</div>
             <div class="grid-item" onclick="toggleStatus(this)">5</div>
             <div class="grid-item" onclick="toggleStatus(this)">6</div>
-            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
             <div class="grid-item" onclick="toggleStatus(this)">7</div>
+            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列：第5列与第6列之间 -->
             <div class="grid-item" onclick="toggleStatus(this)">8</div>
             <div class="grid-item" onclick="toggleStatus(this)">9</div>
             <div class="grid-item" onclick="toggleStatus(this)">10</div>
-            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
             <div class="grid-item" onclick="toggleStatus(this)">J</div>
             <div class="grid-item" onclick="toggleStatus(this)">Q</div>
+            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列：按含空白列计数位于第12列 -->
             <div class="grid-item" onclick="toggleStatus(this)">K</div>
             <div class="grid-item" onclick="toggleStatus(this)">A</div>
-            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
             <div class="grid-item two-item" onclick="toggleStatus(this)">2</div>
             <div class="grid-item empty-card"></div>
             <div class="grid-item empty-card"></div>
             
-            <!-- 第三行：3-5, 6-8, 9-10, J-Q-K-A, 2, 空白, 空白 -->
+            <!-- 第四行：第5列与第6列、第10列与第11列之间有间距 -->
             <div class="grid-item" onclick="toggleStatus(this)">3</div>
             <div class="grid-item" onclick="toggleStatus(this)">4</div>
             <div class="grid-item" onclick="toggleStatus(this)">5</div>
             <div class="grid-item" onclick="toggleStatus(this)">6</div>
-            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
             <div class="grid-item" onclick="toggleStatus(this)">7</div>
+            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列：第5列与第6列之间 -->
             <div class="grid-item" onclick="toggleStatus(this)">8</div>
             <div class="grid-item" onclick="toggleStatus(this)">9</div>
             <div class="grid-item" onclick="toggleStatus(this)">10</div>
-            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
             <div class="grid-item" onclick="toggleStatus(this)">J</div>
             <div class="grid-item" onclick="toggleStatus(this)">Q</div>
+            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列：按含空白列计数位于第12列 -->
             <div class="grid-item" onclick="toggleStatus(this)">K</div>
             <div class="grid-item" onclick="toggleStatus(this)">A</div>
-            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
-            <div class="grid-item two-item" onclick="toggleStatus(this)">2</div>
-            <div class="grid-item empty-card"></div>
-            <div class="grid-item empty-card"></div>
-            
-            <!-- 第四行：3-5, 6-8, 9-10, J-Q-K-A, 2, 小, 大 -->
-            <div class="grid-item" onclick="toggleStatus(this)">3</div>
-            <div class="grid-item" onclick="toggleStatus(this)">4</div>
-            <div class="grid-item" onclick="toggleStatus(this)">5</div>
-            <div class="grid-item" onclick="toggleStatus(this)">6</div>
-            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
-            <div class="grid-item" onclick="toggleStatus(this)">7</div>
-            <div class="grid-item" onclick="toggleStatus(this)">8</div>
-            <div class="grid-item" onclick="toggleStatus(this)">9</div>
-            <div class="grid-item" onclick="toggleStatus(this)">10</div>
-            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
-            <div class="grid-item" onclick="toggleStatus(this)">J</div>
-            <div class="grid-item" onclick="toggleStatus(this)">Q</div>
-            <div class="grid-item" onclick="toggleStatus(this)">K</div>
-            <div class="grid-item" onclick="toggleStatus(this)">A</div>
-            <div class="grid-item special-gap-column"></div> <!-- 特殊间距列 -->
             <div class="grid-item two-item" onclick="toggleStatus(this)">2</div>
             <div class="grid-item top-item" onclick="toggleStatus(this)">小</div>
             <div class="grid-item top-item" onclick="toggleStatus(this)">大</div>
         </div>
         
-        <!-- 训练消息提示（放在卡牌网格下方） -->
-        <div class="game-message" id="gameMessage">
-            <h4>本次训练</h4>
-            <p id="messageText">
-                <span id="timeDisplay">用时: 0.00秒</span><br>
-                <span id="speedDisplay">速度: 0.00卡/秒</span>
-            </p>
-        </div>
     </div>
     
     <script>
@@ -514,12 +540,79 @@
         
         // 观察器实例
         let observer;
+
+        const GRID_COLUMN_COUNT = 17;
+        const STATIC_TOP_ROWS = 5; // 顶部空白行 + 原有4行
+        let valueToColumn = {};
+        let autoClickTimeoutId = null;
+        let advanceTimeoutId = null;
+        let loopRestartTimeoutId = null;
+
+        function captureGridBaseState() {
+            const items = Array.from(document.querySelectorAll('.grid-container > .grid-item'));
+            items.forEach(cell => {
+                if (cell.dataset.baseCaptured === '1') return;
+                cell.dataset.baseCaptured = '1';
+                cell.dataset.baseText = cell.textContent.trim();
+            });
+        }
+
+        function restoreGridBaseState() {
+            const items = Array.from(document.querySelectorAll('.grid-container > .grid-item'));
+            items.forEach(cell => {
+                if (cell.classList.contains('special-gap-column')) {
+                    cell.textContent = '';
+                    cell.dataset.cardValue = '';
+                    cell.classList.remove('bead-filled', 'bead-pending', 'active', 'abacus-gap');
+                    return;
+                }
+
+                const baseText = cell.dataset.baseText || '';
+                cell.textContent = baseText;
+                cell.dataset.cardValue = '';
+                cell.classList.remove('bead-filled', 'bead-pending', 'active', 'abacus-gap');
+
+                // 顶部空白行基态保持为空位
+                if (!baseText) {
+                    cell.classList.add('abacus-gap');
+                }
+            });
+        }
+
+        function clearAsyncTimers() {
+            if (autoClickTimeoutId) {
+                clearTimeout(autoClickTimeoutId);
+                autoClickTimeoutId = null;
+            }
+            if (advanceTimeoutId) {
+                clearTimeout(advanceTimeoutId);
+                advanceTimeoutId = null;
+            }
+            if (loopRestartTimeoutId) {
+                clearTimeout(loopRestartTimeoutId);
+                loopRestartTimeoutId = null;
+            }
+        }
+
+        function setTrainingStatus(timeText, speedText) {
+            const timeDisplay = document.getElementById('timeDisplay');
+            const speedDisplay = document.getElementById('speedDisplay');
+            if (timeDisplay) {
+                timeDisplay.textContent = timeText || '';
+            }
+            if (speedDisplay) {
+                speedDisplay.textContent = speedText || '';
+            }
+        }
         
         // 卡片映射数组
         const cardMap = [];
         
         // 初始化卡片映射
         function initCardMap() {
+            // 清空旧映射，避免重复初始化时数据累积
+            cardMap.length = 0;
+
             // 花色顺序：黑桃、红桃、梅花、方片
             const suits = ['♠', '♥', '♣', '♦'];
             // 牌值顺序：3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A, 2
@@ -537,6 +630,16 @@
             // 添加小王和大王
             cardMap.push({ value: '小', suit: '', display: '小', order: 53 });
             cardMap.push({ value: '大', suit: '', display: '大', order: 54 });
+        }
+
+        // 使用无偏的Fisher-Yates算法进行洗牌
+        function shuffleCards(cards) {
+            const shuffled = [...cards];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
         }
         
         // 初始化Intersection Observer
@@ -561,19 +664,11 @@
         
         // 初始化游戏模式
         function initGameMode() {
-            // 显示训练消息框
-            document.getElementById('gameMessage').style.display = 'block';
-            
+            // 每次初始化前先清理异步任务，避免上轮训练残留影响蓝色初始化
+            clearAsyncTimers();
+
             // 清除所有卡片的激活状态
             clearAllCards();
-            
-            // 清除所有定时器和动画帧请求
-            if (gameState.gameTimer) {
-                cancelAnimationFrame(gameState.gameTimer);
-                gameState.gameTimer = null;
-            }
-            // 清除所有setTimeout定时器
-            window.clearTimeout(window.autoClickTimer);
             
             // 保存当前速度设置
             const currentSpeed = gameState.speed || 1.0;
@@ -595,10 +690,13 @@
             };
             
             // 生成随机排列（Fisher-Yates洗牌算法）
-            gameState.shuffledCards = [...cardMap].sort(() => Math.random() - 0.5);
+            gameState.shuffledCards = shuffleCards(cardMap);
             
             // 生成卡片序列
             generateCardSequence();
+
+            // 重置算盘网格状态
+            initAbacusGrid();
             
             // 更新游戏界面
             updateGameUI();
@@ -613,17 +711,153 @@
                 updateCardSequence();
             }
         }
+
+        // 初始化算盘网格：顶部为空位，下方非空白卡片为蓝色实珠
+        function initAbacusGrid() {
+            // 先恢复到初始模板，确保多次训练后仍能还原完整牌面
+            restoreGridBaseState();
+
+            const items = Array.from(document.querySelectorAll('.grid-container > .grid-item'));
+            if (items.length === 0) return;
+
+            valueToColumn = {};
+            const totalRows = Math.floor(items.length / GRID_COLUMN_COUNT);
+
+            for (let col = 0; col < GRID_COLUMN_COUNT; col++) {
+                const columnCells = [];
+                for (let row = 0; row < totalRows; row++) {
+                    columnCells.push(items[row * GRID_COLUMN_COUNT + col]);
+                }
+
+                // 间距列跳过
+                if (columnCells[0] && columnCells[0].classList.contains('special-gap-column')) {
+                    continue;
+                }
+
+                // 记录列对应的牌值（使用最底部可见非空卡片）
+                for (let row = totalRows - 1; row >= 0; row--) {
+                    const cell = columnCells[row];
+                    const text = cell.textContent.trim();
+                    if (text && !cell.classList.contains('empty-card')) {
+                        cell.dataset.cardValue = text;
+                        if (!valueToColumn[text]) {
+                            valueToColumn[text] = col;
+                        }
+                    }
+                }
+
+                // 顶部空位初始化
+                const topCell = columnCells[0];
+                topCell.classList.remove('bead-filled', 'bead-pending', 'active');
+                topCell.classList.add('abacus-gap');
+                topCell.textContent = '';
+                topCell.dataset.cardValue = '';
+
+                // 下方非空白卡片变成绿色实珠
+                for (let row = 1; row < totalRows; row++) {
+                    const cell = columnCells[row];
+                    const text = cell.textContent.trim();
+
+                    if (cell.classList.contains('empty-card')) {
+                        cell.classList.remove('bead-filled', 'bead-pending', 'active', 'abacus-gap');
+                        cell.dataset.cardValue = '';
+                        continue;
+                    }
+
+                    if (!text) {
+                        cell.classList.remove('bead-filled', 'bead-pending', 'active');
+                        cell.classList.add('abacus-gap');
+                        cell.dataset.cardValue = '';
+                        continue;
+                    }
+
+                    cell.dataset.cardValue = text;
+                    cell.classList.remove('abacus-gap');
+                    cell.classList.add('bead-pending');
+                }
+            }
+        }
+
+        // 按牌值拨动对应列：空位与下一颗实珠交换
+        function moveAbacusForValue(cardValue) {
+            const col = valueToColumn[cardValue];
+            if (col === undefined) return;
+
+            const items = Array.from(document.querySelectorAll('.grid-container > .grid-item'));
+            const totalRows = Math.floor(items.length / GRID_COLUMN_COUNT);
+            const columnCells = [];
+
+            for (let row = 0; row < totalRows; row++) {
+                columnCells.push(items[row * GRID_COLUMN_COUNT + col]);
+            }
+
+            const gapIndex = columnCells.findIndex(cell => cell.classList.contains('abacus-gap'));
+            if (gapIndex < 0) return;
+
+            let filledIndex = -1;
+            for (let i = gapIndex + 1; i < columnCells.length; i++) {
+                if (
+                    columnCells[i].classList.contains('bead-filled') ||
+                    columnCells[i].classList.contains('bead-pending')
+                ) {
+                    filledIndex = i;
+                    break;
+                }
+            }
+
+            if (filledIndex < 0) return;
+
+            const gapCell = columnCells[gapIndex];
+            const filledCell = columnCells[filledIndex];
+
+            // 空位变实珠
+            gapCell.textContent = filledCell.textContent;
+            gapCell.dataset.cardValue = filledCell.dataset.cardValue || filledCell.textContent.trim();
+            gapCell.classList.remove('abacus-gap');
+            gapCell.classList.remove('bead-pending');
+            gapCell.classList.add('bead-filled');
+
+            // 实珠位置变为空位
+            filledCell.textContent = '';
+            filledCell.dataset.cardValue = '';
+            filledCell.classList.remove('bead-filled', 'bead-pending', 'active');
+            filledCell.classList.add('abacus-gap');
+        }
+
+        function advanceGameByValue(cardValue) {
+            moveAbacusForValue(cardValue);
+            gameState.correctCount++;
+            gameState.currentIndex++;
+            updateGameUI();
+            updateCardSequence();
+            showNextCard();
+
+            if (gameState.currentIndex >= 54) {
+                gameOver(true);
+            }
+        }
         
         // 重新开始游戏
         function restartGame() {
             initGameMode();
             
             // 重置按钮状态
-            const button = document.getElementById('startButton');
-            button.textContent = '开始训练';
-            button.disabled = false;
-            button.style.backgroundColor = '#4CAF50';
-            button.onclick = startGame;
+            const singleButton = document.getElementById('singleGameButton');
+            const loopButton = document.getElementById('loopGameButton');
+
+            if (singleButton) {
+                singleButton.textContent = '单次训练';
+                singleButton.disabled = false;
+                singleButton.style.backgroundColor = '#4CAF50';
+                singleButton.onclick = startSingleGame;
+            }
+
+            if (loopButton) {
+                loopButton.textContent = '循环训练';
+                loopButton.disabled = false;
+                loopButton.style.backgroundColor = '#4CAF50';
+                loopButton.onclick = startLoopGame;
+            }
         }
         
         // 生成卡片序列（固定格子模式）
@@ -635,7 +869,7 @@
             if (gameState.shuffledCards.length !== 54) {
                 // 重新生成54张卡片
                 initCardMap();
-                gameState.shuffledCards = [...cardMap].sort(() => Math.random() - 0.5);
+                gameState.shuffledCards = shuffleCards(cardMap);
             }
             
             // 直接使用15个格子，对应下边的15列
@@ -730,8 +964,7 @@
                 const minDelay = 50; // 最小延迟时间为50毫秒
                 adjustedDelay = Math.max(adjustedDelay, minDelay);
                 console.log(`当前速度: ${gameState.speed}x, 调整后的延迟: ${adjustedDelay}ms`);
-                // 存储定时器ID
-                window.autoClickTimer = setTimeout(startAutoClick, adjustedDelay);
+                autoClickTimeoutId = setTimeout(startAutoClick, adjustedDelay);
             }
         }
         
@@ -741,13 +974,17 @@
             const button = document.getElementById('autoModeButton');
             
             if (autoMode) {
-                button.textContent = '关闭自动';
-                button.style.backgroundColor = '#f44336';
+                if (button) {
+                    button.textContent = '关闭自动';
+                    button.style.backgroundColor = '#f44336';
+                }
                 // 无论游戏是否正在进行，都开始自动点击和滚动
                 startAutoGame();
             } else {
-                button.textContent = '自动模式';
-                button.style.backgroundColor = '#4CAF50';
+                if (button) {
+                    button.textContent = '自动模式';
+                    button.style.backgroundColor = '#4CAF50';
+                }
                 // 停止自动游戏
                 gameState.isPlaying = false;
                 if (gameState.gameTimer) {
@@ -800,95 +1037,20 @@
             // 获取当前需要点击的卡片
             const currentCard = gameState.shuffledCards[gameState.currentIndex];
             if (!currentCard) return;
-            
-            // 找到对应的卡片元素
-            const allCards = document.querySelectorAll('.grid-container > div');
-            let targetCard = null;
-            
-            // 无花色模式：根据卡片类型选择正确的卡片
-            if (currentCard.value === '小' || currentCard.value === '大') {
-                // 大小王：选择最底部未激活的
-                const kingCards = [];
-                allCards.forEach(card => {
-                    if (card.textContent === currentCard.display) {
-                        kingCards.push(card);
-                    }
-                });
-                // 从底部向上查找未激活的卡片
-                for (let i = kingCards.length - 1; i >= 0; i--) {
-                    if (!kingCards[i].classList.contains('active')) {
-                        targetCard = kingCards[i];
-                        break;
-                    }
-                }
-            } else if (currentCard.value === '2') {
-                // 2的卡片：选择最底部未激活的
-                const twoCards = [];
-                allCards.forEach(card => {
-                    if (card.textContent.includes('2')) {
-                        twoCards.push(card);
-                    }
-                });
-                // 从底部向上查找未激活的卡片
-                for (let i = twoCards.length - 1; i >= 0; i--) {
-                    if (!twoCards[i].classList.contains('active')) {
-                        targetCard = twoCards[i];
-                        break;
-                    }
-                }
-            } else {
-                // 其他卡片：选择最底部未激活的
-                const valueCards = [];
-                allCards.forEach(card => {
-                    if (card.textContent.includes(currentCard.value)) {
-                        valueCards.push(card);
-                    }
-                });
-                // 从底部向上查找未激活的卡片
-                for (let i = valueCards.length - 1; i >= 0; i--) {
-                    if (!valueCards[i].classList.contains('active')) {
-                        targetCard = valueCards[i];
-                        break;
-                    }
-                }
-            }
-            
-            // 如果找到目标卡片，触发点击
-            if (targetCard) {
-                // 保存当前索引，确保高亮和点击使用相同的索引
-                const currentIndex = gameState.currentIndex;
-                
+
+            // 直接按当前牌值推进算盘与游戏进度
+            if (valueToColumn[currentCard.value] !== undefined) {
                 // 使用根据当前速度调整后的延迟时间
                 let adjustedDelay = gameConfig.clickDelay / gameState.speed;
                 // 添加最小延迟时间限制，避免浏览器性能问题
                 const minDelay = 50; // 最小延迟时间为50毫秒
                 adjustedDelay = Math.max(adjustedDelay, minDelay);
                 
-                setTimeout(() => {
-                    // 1. 点击下方对应的卡片，使其背景变为绿色
-                    targetCard.classList.add('active');
-                    
-                    // 2. 增加正确次数
-                    gameState.correctCount++;
-                    
-                    // 3. 增加当前索引
-                    gameState.currentIndex++;
-                    
-                    // 4. 更新游戏界面
-                    updateGameUI();
-                    
-                    // 5. 更新卡片序列（这会自动处理高亮框的移动）
-                    updateCardSequence();
-                    
-                    // 6. 重置lastClickedIndex，以便下一张卡片可以被正确处理
+                advanceTimeoutId = setTimeout(() => {
+                    advanceGameByValue(currentCard.value);
+
+                    // 重置lastClickedIndex，以便下一张卡片可以被正确处理
                     gameState.lastClickedIndex = -1;
-                    
-                    // 7. 检查游戏是否结束
-                    if (gameState.currentIndex >= 54) {
-                        // 训练完成
-                        gameOver(true);
-                    }
-                    
                 }, adjustedDelay); // 使用调整后的延迟时间
             } else {
                 // 如果没有找到目标卡片，重置lastClickedIndex，继续尝试
@@ -899,6 +1061,7 @@
         // 结束游戏
         function endGame() {
             gameState.isPlaying = false;
+            clearAsyncTimers();
             
             // 清除游戏定时器
             if (gameState.gameTimer) {
@@ -912,6 +1075,7 @@
         // 训练结束处理
         function gameOver(isWin) {
             gameState.isPlaying = false;
+            clearAsyncTimers();
             
             // 清除游戏定时器
             if (gameState.gameTimer) {
@@ -919,38 +1083,42 @@
                 gameState.gameTimer = null;
             }
             
-            // 显示训练结果
-            const timeDisplay = document.getElementById('timeDisplay');
-            const speedDisplay = document.getElementById('speedDisplay');
+            // 循环训练：无论本轮成功还是失败，都继续下一轮
+            if (isLoopMode) {
+                if (isWin) {
+                    const endTime = Date.now();
+                    const duration = (endTime - gameState.startTime) / 1000;
+                    const speed = (gameState.correctCount / duration).toFixed(2);
+                    setTrainingStatus(`用时: ${duration.toFixed(2)}秒`, `速度: ${speed}卡/秒`);
+                } else {
+                    setTrainingStatus('本轮失败，准备下一轮...', '');
+                }
+
+                loopRestartTimeoutId = setTimeout(() => {
+                    startLoopGame();
+                }, isWin ? 1000 : 600);
+                return;
+            }
             
             if (isWin) {
                 const endTime = Date.now();
                 const duration = (endTime - gameState.startTime) / 1000;
                 const speed = (gameState.correctCount / duration).toFixed(2);
-                timeDisplay.textContent = `用时: ${duration.toFixed(2)}秒`;
-                speedDisplay.textContent = `速度: ${speed}卡/秒`;
-                
-                // 如果是循环训练模式，自动重新开始游戏
-                if (isLoopMode) {
-                    setTimeout(() => {
-                        startLoopGame();
-                    }, 1000); // 1秒后自动重新开始
-                } else {
-                    // 重置按钮状态
-                    const singleButton = document.getElementById('singleGameButton');
-                    const loopButton = document.getElementById('loopGameButton');
-                    singleButton.textContent = '单次训练';
-                    singleButton.disabled = false;
-                    singleButton.style.backgroundColor = '#4CAF50';
-                    singleButton.onclick = startSingleGame;
-                    loopButton.textContent = '循环训练';
-                    loopButton.disabled = false;
-                    loopButton.style.backgroundColor = '#4CAF50';
-                    loopButton.onclick = startLoopGame;
-                }
+                setTrainingStatus(`用时: ${duration.toFixed(2)}秒`, `速度: ${speed}卡/秒`);
+
+                // 重置按钮状态
+                const singleButton = document.getElementById('singleGameButton');
+                const loopButton = document.getElementById('loopGameButton');
+                singleButton.textContent = '单次训练';
+                singleButton.disabled = false;
+                singleButton.style.backgroundColor = '#4CAF50';
+                singleButton.onclick = startSingleGame;
+                loopButton.textContent = '循环训练';
+                loopButton.disabled = false;
+                loopButton.style.backgroundColor = '#4CAF50';
+                loopButton.onclick = startLoopGame;
             } else {
-                timeDisplay.textContent = '训练失败！';
-                speedDisplay.textContent = '';
+                setTrainingStatus('训练失败！', '');
                 
                 // 重置按钮状态
                 const singleButton = document.getElementById('singleGameButton');
@@ -972,27 +1140,20 @@
             document.getElementById('gameCorrect').textContent = gameState.correctCount;
             document.getElementById('gameWrong').textContent = gameState.wrongCount;
             
-            // 更新训练消息框中的信息
-            const timeDisplay = document.getElementById('timeDisplay');
-            const speedDisplay = document.getElementById('speedDisplay');
-            
             if (gameState.isPlaying && gameState.startTime > 0) {
                 const currentTime = Date.now();
                 const duration = (currentTime - gameState.startTime) / 1000;
                 const speed = gameState.correctCount > 0 ? (gameState.correctCount / duration).toFixed(2) : '0.00';
-                timeDisplay.textContent = `用时: ${duration.toFixed(2)}秒`;
-                speedDisplay.textContent = `速度: ${speed}卡/秒`;
+                setTrainingStatus(`用时: ${duration.toFixed(2)}秒`, `速度: ${speed}卡/秒`);
             } else if (gameState.correctCount > 0) {
                 // 训练结束后显示最终结果
                 const endTime = Date.now();
                 const duration = (endTime - gameState.startTime) / 1000;
                 const speed = (gameState.correctCount / duration).toFixed(2);
-                timeDisplay.textContent = `用时: ${duration.toFixed(2)}秒`;
-                speedDisplay.textContent = `速度: ${speed}卡/秒`;
+                setTrainingStatus(`用时: ${duration.toFixed(2)}秒`, `速度: ${speed}卡/秒`);
             } else {
                 // 初始状态
-                timeDisplay.textContent = '用时: 0.00秒';
-                speedDisplay.textContent = '速度: 0.00卡/秒';
+                setTrainingStatus('用时: 0.00秒', '速度: 0.00卡/秒');
             }
         }
         
@@ -1028,141 +1189,25 @@
         // 检查用户点击的卡片是否正确
         function checkCardClick(cardElement) {
             if (!gameMode) return;
+            if (cardElement.classList.contains('abacus-gap')) return;
             
-            const clickedCardText = cardElement.textContent;
+            const clickedCardText = cardElement.dataset.cardValue || cardElement.textContent.trim();
             const currentCard = gameState.shuffledCards[gameState.currentIndex];
-            
-            // 检查是否正确：
-            // 1. 对于大小王，必须完全匹配
-            // 2. 对于其他卡片，只需要匹配数字部分
-            let isCorrect = false;
-            
-            if (currentCard.value === '小' || currentCard.value === '大') {
-                // 大小王必须完全匹配
-                isCorrect = (clickedCardText === currentCard.display);
-            } else {
-                // 其他卡片只需要匹配数字部分
-                // 提取点击卡片的数字部分
-                const clickedValue = clickedCardText.replace(/[^0-9JQKA]/g, '').trim();
-                // 提取当前卡片的数字部分
-                const currentValue = currentCard.value;
-                isCorrect = (clickedValue === currentValue);
-            }
+
+            const isCorrect = clickedCardText === currentCard.value;
             
             if (isCorrect) {
-                // 正确
-                // 始终使用无花色模式的逻辑
-                // 找到所有卡片并分组
-                const allCards = document.querySelectorAll('.grid-container > div');
-                
-                // 分组映射：3-10, J-Q-K-A, 2, 小, 大
-                const groups = {
-                    '3': [],
-                    '4': [],
-                    '5': [],
-                    '6': [],
-                    '7': [],
-                    '8': [],
-                    '9': [],
-                    '10': [],
-                    'J': [],
-                    'Q': [],
-                    'K': [],
-                    'A': [],
-                    '2': [],
-                    '小': [],
-                    '大': []
-                };
-                
-                // 收集卡片到对应分组
-                allCards.forEach(card => {
-                    const text = card.textContent;
-                    if (text.includes('3') && card.hasAttribute('onclick')) groups['3'].push(card);
-                    else if (text.includes('4') && card.hasAttribute('onclick')) groups['4'].push(card);
-                    else if (text.includes('5') && card.hasAttribute('onclick')) groups['5'].push(card);
-                    else if (text.includes('6') && card.hasAttribute('onclick')) groups['6'].push(card);
-                    else if (text.includes('7') && card.hasAttribute('onclick')) groups['7'].push(card);
-                    else if (text.includes('8') && card.hasAttribute('onclick')) groups['8'].push(card);
-                    else if (text.includes('9') && card.hasAttribute('onclick')) groups['9'].push(card);
-                    else if (text.includes('10') && card.hasAttribute('onclick')) groups['10'].push(card);
-                    else if (text.includes('J') && card.hasAttribute('onclick')) groups['J'].push(card);
-                    else if (text.includes('Q') && card.hasAttribute('onclick')) groups['Q'].push(card);
-                    else if (text.includes('K') && card.hasAttribute('onclick')) groups['K'].push(card);
-                    else if (text.includes('A') && card.hasAttribute('onclick')) groups['A'].push(card);
-                    else if (text.includes('2') && card.hasAttribute('onclick')) groups['2'].push(card);
-                    else if (text.includes('小') && card.hasAttribute('onclick')) groups['小'].push(card);
-                    else if (text.includes('大') && card.hasAttribute('onclick')) groups['大'].push(card);
-                });
-                
-                // 根据当前卡片的值选择对应的分组进行处理
-                if (currentCard.value === '2') {
-                    // 对于2的卡片：从底部向上排列
-                    const twoGroup = groups['2'];
-                    if (twoGroup.length > 0) {
-                        // 找到第一个从底部开始未激活的卡片
-                        for (let i = twoGroup.length - 1; i >= 0; i--) {
-                            if (!twoGroup[i].classList.contains('active')) {
-                                twoGroup[i].classList.add('active');
-                                break;
-                            }
-                        }
-                    }
-                } else if (currentCard.value === '小' || currentCard.value === '大') {
-                    // 对于大小王：从底部向上排列
-                    const kingGroup = groups[currentCard.value];
-                    if (kingGroup.length > 0) {
-                        // 找到第一个从底部开始未激活的卡片
-                        for (let i = kingGroup.length - 1; i >= 0; i--) {
-                            if (!kingGroup[i].classList.contains('active')) {
-                                kingGroup[i].classList.add('active');
-                                break;
-                            }
-                        }
-                    }
-                } else {
-                    // 对于数字和字母卡片：从底部向上渲染
-                    const group = groups[currentCard.value];
-                    if (group.length > 0) {
-                        // 找到第一个从底部开始未激活的卡片
-                        for (let i = group.length - 1; i >= 0; i--) {
-                            if (!group[i].classList.contains('active')) {
-                                group[i].classList.add('active');
-                                break;
-                            }
-                        }
-                    }
-                }
-                
-                // 增加正确次数
-                gameState.correctCount++;
-                
-                // 增加当前索引
-                gameState.currentIndex++;
-                
-                // 添加延迟，确保滚动有足够时间完成
-                setTimeout(() => {
-                    // 更新卡片序列（这会自动处理高亮框的移动）
-                    updateCardSequence();
-                    // 显示下一张卡片
-                    showNextCard();
-                }, 200); // 200毫秒延迟，给滚动足够时间调整
+                // 添加延迟，保持和自动模式一致的拨珠节奏
+                advanceTimeoutId = setTimeout(() => {
+                    advanceGameByValue(currentCard.value);
+                }, 120);
                 
             } else {
                 // 错误
                 gameState.wrongCount++;
-                
-                // 显示错误消息
-                const timeDisplay = document.getElementById('timeDisplay');
-                const speedDisplay = document.getElementById('speedDisplay');
-                timeDisplay.textContent = '错误！请重新开始。';
-                speedDisplay.textContent = '';
-                
-                // 游戏结束
-                gameState.isPlaying = false;
-                if (gameState.gameTimer) {
-                    cancelAnimationFrame(gameState.gameTimer);
-                    gameState.gameTimer = null;
-                }
+
+                // 统一通过gameOver处理，循环模式下可自动进入下一轮
+                gameOver(false);
             }
         }
         
@@ -1213,8 +1258,12 @@
             loopButton.style.backgroundColor = '#4CAF50';
             loopButton.onclick = startLoopGame;
             
-            // 开始自动游戏
-            startAutoGame();
+            // 先展示蓝色初始化，再开始自动游戏
+            setTimeout(() => {
+                if (!gameState.isPlaying && autoMode && !isLoopMode) {
+                    startAutoGame();
+                }
+            }, 120);
         }
         
         // 开始循环训练函数
@@ -1249,6 +1298,7 @@
             // 暂停自动模式
             autoMode = false;
             gameState.isPlaying = false;
+            clearAsyncTimers();
             
             // 清除游戏定时器
             if (gameState.gameTimer) {
@@ -1325,8 +1375,14 @@
         
         // 初始化函数
         function init() {
+            // 记录网格基态，用于每次训练完整还原
+            captureGridBaseState();
+
             // 初始化卡片映射
             initCardMap();
+
+            // 初始化观察器（用于高亮卡片越界检测）
+            initObserver();
             
             // 初始化游戏模式
             initGameMode();
